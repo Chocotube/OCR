@@ -2,5 +2,5 @@
 
 void main()
 {
-    printf("Bienvenue au OCR gros")
+    printf("Bienvenue au OCR gros");
 }

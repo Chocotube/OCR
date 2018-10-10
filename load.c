@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
-void Main()
-{
-    
-}
+
 
 void Loadimage()
 {
@@ -15,6 +12,12 @@ void Loadimage()
 	image = SDL_LoadBMP(path);
 	if(image = NULL)
 	{
+		printf("wesh");
 		SDL_GetError();
 	}
+}
+int main()
+{
+	Loadimage();
+	return 0;
 }

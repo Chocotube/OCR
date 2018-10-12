@@ -5,7 +5,7 @@
 void Loadimage()
 {
 	char path[300];
-	scanf("%S",path);
+	scanf("%s",path);
 	SDL_Surface * image = NULL;
 	int end = 0;
 	SDL_Event event;
@@ -13,7 +13,7 @@ void Loadimage()
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window * window = SDL_CreateWindow("SDL DISPLAYING IMAGE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,640,480,0);
+	SDL_Window * window = SDL_CreateWindow(path, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,640,480,0);
 
 	SDL_Renderer *  renderer = SDL_CreateRenderer(window, -1, 0);
 

@@ -17,3 +17,5 @@ SDL_Surface surfBlocer(SDL_Surface surf)
     arrayBound(surfToVerArray(surf))
 	return surfCropper(surf, surfToBlocRecr(, ))
 }
+
+SALUT JE SUIS BO

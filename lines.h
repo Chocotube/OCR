@@ -5,7 +5,8 @@ typedef struct Element Element;
 
 struct Element
 {
-    int data[2];
+    int data1;
+	int data2;
     Element *next;
 };
     
@@ -16,7 +17,8 @@ struct List
     Element *first;
 };
 
-Element* createElement(int data[2]);
+
+Element* createElement(int data1,int data2);
 List* createList();
 void insertHead(List *list, Element *element);
 List* arrToBoundList(int arr[], int len);

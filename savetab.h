@@ -23,15 +23,17 @@ Un_tab2d * creer_tab2d(unsigned int nb_lignes, unsigned int nb_colonnes)
 }
 
 
-void ecrire_tab2d(Un_tab2d *tab, char *nom_fichier){
+void ecrire_tab2d(Un_tab2d *tab, char *nom_fichier)
+{
 
         FILE *fic;
         int nb_li,nb_co;
-        int *t;
+        int *t = tab -> plan;
         int i,j;
 
         fic=fopen(nom_fichier,"w");
-        if (fic==NULL){
+        if (fic==NULL)
+	{
            fprintf(stderr,"Impossible d'ouvrir le fichier");
            exit (1);
         }
@@ -41,7 +43,8 @@ void ecrire_tab2d(Un_tab2d *tab, char *nom_fichier){
         fprintf(fic,"%d\n",nb_li);
         fprintf(fic,"%d\n",nb_co);
 
-        for(i=0;i<nb_li;i++){
+        for(i=0;i<nb_li;i++)
+	{
            for(j=0;i<nb_co;j++) {
                    fprintf(fic,"%d",t[i*nb_co+j]);
           }

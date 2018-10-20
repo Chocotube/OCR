@@ -15,6 +15,34 @@ int IsThisLineGood(int line ,imageData *img)
 	return res;
 }
 
+SDL_Rect MakeARectangle(int x ,int y, int w, int h)
+{
+	SDL_Rect res;
+	res.x = x;
+	res.y = y;
+	res.w = w;
+	res.h = h;
+	return res;
+}
+
+
+
+void CopyAndSaveText(SDL_Surface * image, int startx, int starty, int width, int height, int LineNumber)
+{
+	SDL_Surface *Result;
+	char buf[200];
+
+	Result = SDL_CreateRGBSurface( 0, width, height, 32, 0, 0, 0, 0);
+	SDL_Rect Startrectangle = MakeARectangle( startx, starty, width, height);
+	SDL_Rect EndRectangle = MakeARectangle( 0, 0, width, height);
+	SDL_BlitSurface(image, &Startrectangle, Result, &EndRectangle);
+	sprintf(buf, "line_%d.bmp", LineNumber);
+
+	SDL_SaveBMP(Result,buf);
+}
+
+
+
 void FindText(imageData *img)
 {
 	int line = 0;
@@ -24,22 +52,26 @@ void FindText(imageData *img)
 		printf("hey\n");
 		int i = 0;
 		int WefounIt = 0;
+		
 		int howlong = 0;
+		int start = line;
 		while(IsThisLineGood(line,img) == 1 && line < maxline)
 		{
-			printf("going down m8\n");
+			//printf("going down m8\n");
 			howlong++;
+			printf("%d\n",line);
 			line++;
 		}
+		howlong--;
+		line--;
 		int smallestspace = 0;
 		int oldclosest = 0;
 		int oldfurthest = img -> image -> w;
 		int keep = howlong;
-		while(howlong > 0)
+		while(howlong >= 0)
 		{
-			printf("fuck boi i m going back up  %d \n",line);
+			//printf("fuck boi i m going back up  %d \n",line);
 			List* blackbits = arrToBoundList(img,line);
-			printf("i have no idea");
 			int closest = blackbits -> first -> data2;
 			if(closest > oldclosest)
 			{
@@ -47,46 +79,42 @@ void FindText(imageData *img)
 			}
 			while(blackbits -> first -> next != NULL)
 			{
-				printf("wow you re good\n");
+				//printf("wow you re good\n");
 				blackbits -> first = blackbits -> first -> next;
 			}
 			int furthest = blackbits -> first -> data1;
 			if(furthest > oldfurthest)
 			{
+
 				oldfurthest = furthest;
 			}
 			howlong--;
-			line--;
-			printf("OH DJADJA\n");
+			line--;;
 			WefounIt = 1;
 		}
+		howlong++;
+		line++;
 		if(WefounIt == 1)
 		{
+			
+			//printf("%d ,oldclosest , %d oldfurthest ,%d, start , %d keep , %d , howlong",oldclosest,oldfurthest,start,keep,howlong);
 			i++;
-			char buf[200];
 			int newdimensionx = oldfurthest - oldclosest;
 			int newdimensiony = keep - howlong;
-			SDL_Rect *mynewrectangle;
-			mynewrectangle -> x = oldclosest;
-			mynewrectangle -> y = howlong;
-			mynewrectangle -> w = newdimensionx;
-			mynewrectangle -> h = newdimensiony;
-			SDL_Rect *destination;
-			destination -> x = 0;
-			destination -> y = 0;
-			destination -> w = newdimensionx;
-			destination -> y = newdimensiony;
-			SDL_Surface *Myresult = SDL_CreateRGBSurface(0,newdimensionx,newdimensiony,32,0,0,0,0);
-			SDL_BlitSurface(img -> image,mynewrectangle ,Myresult ,destination);
-			sprintf(buf, "line_%d.bmp", i);
-			SDL_SaveBMP(Myresult,buf);
-			WefounIt = 0;
-		}
 
+			CopyAndSaveText( img -> image, oldclosest, start, newdimensionx , newdimensiony, i);
+			WefounIt = 0;
+
+		}
+		printf("%d",start);
 		line += keep + 1;
 		//save
 	}
 }
+
+
+
+
 
 
 

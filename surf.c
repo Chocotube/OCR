@@ -1,5 +1,8 @@
-#include "pixel.h"
+/*#include "pixel.h"
 #include "surf.h"
+#include "loadfile.h"
+#include <stdio.h>
+#include <SDL2/SDL.h>
 
 int surfToHorArray(SDL_Surface *surf)					//Return the addition of all RGB of the horizontal pixels
 {
@@ -60,7 +63,7 @@ SDL_Surface surfCropper(SDL_Surface surf, SDL_Rect crop)		//Return the surface c
 	SDL_BlitSurface(surf, &crop, rect, res);
 	return res;
 }
-
+*/
 
 
 

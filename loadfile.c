@@ -13,7 +13,7 @@ void Loadimage(imageData *img) //This function opens an image and gives an sdl s
 	img -> window = SDL_CreateWindow(img -> path, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,640,480,0);//Creates the window
 	img -> renderer = SDL_CreateRenderer(img -> window, -1, 0); //Creates the renderer for the image
 */
-	img -> image = SDL_LoadBMP("le100.bmp"/*img -> path*/); //Loads the image
+	img -> image = SDL_LoadBMP("blackorwhite.bmp"/*img -> path*/); //Loads the image
 	/*img -> texture = SDL_CreateTextureFromSurface(img -> renderer, img -> image);//Puts the texture in the window
 	if(img -> image = NULL) //If we can't find the image sdl will give an Error
 	{

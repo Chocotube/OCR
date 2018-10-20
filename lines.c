@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL2/SDL.h>
+#include "loadfile.h"
 #include "lines.h"
+#include "grey.h"
 
 /* 
  
@@ -24,8 +27,8 @@ Element* createElement(int data1, int data2)
     {
         element->data1 = data1;
         element->data2 = data2;
-        printf("1first = %d\n", element->data1);
-        printf("1last = %d\n", element->data2);
+        //printf("1first = %d\n", element->data1);
+        //printf("1last = %d\n", element->data2);
         element->next =  NULL;
     }
     
@@ -49,33 +52,39 @@ void insertHead(List *list, Element *element)
     
     if (list->first != NULL)
     {
-    printf("3first = %d\n", list->first->data1);
-    printf("3last = %d\n", list->first->data2);
+    //printf("3first = %d\n", list->first->data1);
+    //printf("3last = %d\n", list->first->data2);
     }
     element->next = list->first;
     list->first = element;
     if (element->next != NULL)
     {
-        printf("first = %d\n", element->next->data1);
-        printf("last = %d\n", element-> next->data2);
+        //printf("first = %d\n", element->next->data1);
+        //printf("last = %d\n", element-> next->data2);
     }
     else
-        printf("null\n");
+	{
+        //printf("null\n");
+	}
 }
 
-
-
-List* arrToBoundList(int arr[], int len)
+List* arrToBoundList(imageData *img, int y)
 {
     List *res = createList();
-	int i = len-1, first = 0, last = 0;
+	
+	int x = (img -> image -> w);
+
+	int i = x - 1, first = 0, last = 0;
     while (i > 0)
 	{
-		if (arr[i] > 0)
+		int pxl = (int)getpixel(img -> image,i,y);
+
+		if (pxl > 0)
 		{
 			last = i;
-			while (i > 0 && arr[i] > 0)
+			while (i > 0 && pxl == 4294967295)
             {
+				pxl = getpixel(img -> image,i,y);
                 i--;
             }
             first = i + 1;
@@ -87,11 +96,11 @@ List* arrToBoundList(int arr[], int len)
     return res;
 }
 
-int main()
-{
-       
+//int main()
+//{
+    /*  
     int arr[21] = {1,1,1,1,0,0,1,1,1,0,0,0,1,1,1,1,0,0,1,1,0};
-    List* list = arrToBoundList(arr, 21);
+    List* list = arrToBoundList(arr, 21);*/
     /*int a0[2] = {2, 6};
     int *a1 = a0;
     printf("[%d, %d] \n", a1[0], a1[1]);
@@ -99,7 +108,7 @@ int main()
     int a = element->data[0];
     int b = element->data[1];
     printf("[%d, %d] -> ", a, b);*/
-    
+    /*
     Element* element = list->first;
     
     printf("2first = %d\n", element->next->data1);
@@ -112,6 +121,6 @@ int main()
         element = element->next;
     }
     printf("NULL\n");
-    
-    return 0;
-}
+    */
+  //  return 0;
+//}

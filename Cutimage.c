@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include "loadfile.h"
+#include "grey.h"
 #include "lines.h"
 
 
@@ -8,7 +9,7 @@ int IsThisLineGood(int line ,imageData *img)
 {
 	int res = 0;
 	List* tst = arrToBoundList(img,line);
-	if (tst != NULL)
+	if (tst -> first != NULL)
 	{
 		res = 1;
 	}
@@ -24,6 +25,44 @@ SDL_Rect MakeARectangle(int x ,int y, int w, int h)
 	res.h = h;
 	return res;
 }
+
+int IsBlankLine(SDL_Surface *image,int line)
+{
+	int index = 0;
+	int width = image -> w;
+	while (index <  width && getpixel(image,index,line) != 0)
+	{
+		index++;
+	}
+	if(index == width)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+int FindClosest(SDL_Surface *image, int line)
+{
+	int index = 0;
+	int width = image -> w;
+	while(getpixel(image,index,line) != 0)
+	{
+		index++;
+	}
+	return index;
+}
+
+int FindFurthest(SDL_Surface *image, int line)
+{
+	int width = image -> w;
+	int index = width - 1;
+	while(getpixel(image,index,line) != 0)
+	{
+		index--;
+	}
+	return index + 1;
+}
+
 
 
 
@@ -47,42 +86,40 @@ void FindText(imageData *img)
 {
 	int line = 0;
 	int maxline = img -> image -> h;
+	int i = 0;
 	while(line < maxline)
 	{
-		printf("hey\n");
-		int i = 0;
+		//printf("hey\n");
 		int WefounIt = 0;
-		
 		int howlong = 0;
 		int start = line;
-		while(IsThisLineGood(line,img) == 1 && line < maxline)
+		int deep = 1;
+		while(IsBlankLine(img -> image, line)  == 0 && line < maxline)
 		{
-			//printf("going down m8\n");
+			printf("going down m8\n");
 			howlong++;
-			printf("%d\n",line);
+			deep++;
+			//printf("%d\n",line);
 			line++;
 		}
+		printf("checkpoint 1 : %d\n",line);
 		howlong--;
 		line--;
 		int smallestspace = 0;
-		int oldclosest = 0;
-		int oldfurthest = img -> image -> w;
+		int oldfurthest = 0;
+		int oldclosest = img -> image -> w;
 		int keep = howlong;
 		while(howlong >= 0)
 		{
-			//printf("fuck boi i m going back up  %d \n",line);
-			List* blackbits = arrToBoundList(img,line);
-			int closest = blackbits -> first -> data2;
-			if(closest > oldclosest)
+			printf("fuck boi i m going back up  %d \n",line);
+			
+			int closest = FindClosest(img -> image,line);
+			if(closest < oldclosest)
 			{
 				oldclosest = closest;
 			}
-			while(blackbits -> first -> next != NULL)
-			{
-				//printf("wow you re good\n");
-				blackbits -> first = blackbits -> first -> next;
-			}
-			int furthest = blackbits -> first -> data1;
+
+			int furthest = FindFurthest(img -> image,line);
 			if(furthest > oldfurthest)
 			{
 
@@ -93,11 +130,14 @@ void FindText(imageData *img)
 			WefounIt = 1;
 		}
 		howlong++;
-		line++;
+		line++;	
+		//printf("%d ,oldclosest , %d oldfurthest ,%d, start , %d keep , %d , howlong",oldclosest,oldfurthest,start,keep,howlong);
+
+		printf("checkpoint 2 : %d\n",line);
 		if(WefounIt == 1)
 		{
 			
-			//printf("%d ,oldclosest , %d oldfurthest ,%d, start , %d keep , %d , howlong",oldclosest,oldfurthest,start,keep,howlong);
+			printf("%d ,oldclosest , %d oldfurthest ,%d, start , %d keep , %d , howlong",oldclosest,oldfurthest,start,keep,howlong);
 			i++;
 			int newdimensionx = oldfurthest - oldclosest;
 			int newdimensiony = keep - howlong;
@@ -106,8 +146,10 @@ void FindText(imageData *img)
 			WefounIt = 0;
 
 		}
-		printf("%d",start);
-		line += keep + 1;
+		//printf("%d",start);
+		printf("line one is %d\n",IsBlankLine(img -> image ,line));
+		line += deep;
+		printf("checkpoint 3 : %d\n",line);
 		//save
 	}
 }

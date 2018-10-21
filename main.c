@@ -4,7 +4,7 @@
 #include "grey.h"
 #include "Cutimage.h"
 
-int main(int argc, char* argv[])
+int main()
 {
 	
     printf("Bienvenue au OCR gros\n");
@@ -12,12 +12,12 @@ int main(int argc, char* argv[])
 	img = (imageData *) malloc(sizeof(imageData));
 	Loadimage(img);
 	//printf("%d", img -> image -> w);
-	//greyscale(img);
-	//BlackOrWhite(img,0.5f);
+	greyscale(img);
+	BlackOrWhite(img,0.5f);
 	FindText(img);
 	//Mettez vous fonctions ici pour 
 	//Delimage(img);
-	printf("fished");
+	printf("fishedi\n");
 	return 0;
 
 }

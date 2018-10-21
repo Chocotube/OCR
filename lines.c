@@ -18,7 +18,7 @@
  
  */
 
-
+/*
 Element* createElement(int data1, int data2)
 {
     Element* element = malloc(sizeof(Element));
@@ -78,9 +78,10 @@ List* arrToBoundList(imageData *img, int y)
     while (i > 0)
 	{
 		int pxl = (int)getpixel(img -> image,i,y);
-
-		if (pxl > 0)
+		
+		if (pxl == 4294967295)
 		{
+			printf("FOUND line : %d",y);
 			last = i;
 			while (i > 0 && pxl == 4294967295)
             {
@@ -95,7 +96,7 @@ List* arrToBoundList(imageData *img, int y)
     }
     return res;
 }
-
+*/
 //int main()
 //{
     /*  

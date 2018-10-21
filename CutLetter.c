@@ -30,7 +30,6 @@ int IsBlankColonne(SDL_Surface *image,int colonne)
 int FindClosest2(SDL_Surface *image, int colonne)
 {
 	int index = 0;
-	int height = image -> h;
 	while(getpixel(image,colonne,index) > 0)
 	{
 		index++;

@@ -17,6 +17,10 @@ main.o: main.c loadfile.h grey.h Cutimage.h
 
 ocr: blocs.o Cutimage.o CutLetter.o grey.o lines.o loadfile.o main.o pixel.o surf.o
 	gcc -o ocr *.o `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+	
+NeuralNet.o : NeuraNet.c NeuralNet.h
+	gcc -o NeuralNet.o -c NeuralNet.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+
 
 clean:
 	rm -rf *.o

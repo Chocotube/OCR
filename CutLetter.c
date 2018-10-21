@@ -6,7 +6,7 @@
 #include "CutLetter.h"
 
 
-
+//We check if the column is blank or not
 int IsBlankColonne(SDL_Surface *image,int colonne)
 {
 	int index = 0;
@@ -15,18 +15,17 @@ int IsBlankColonne(SDL_Surface *image,int colonne)
 	{
 
 		index++;
-		printf("colonne %d,%d color : %d\n",colonne,index,getpixel(image,colonne,index));
+
 	}
 	if(index == height + 1)
 	{
-		printf("colonne %d is blank\n",colonne);
 		return 1;
 	}
 	return 0;
 }
 
 
-
+//We find the lowest pixel in the letter
 int FindClosest2(SDL_Surface *image, int colonne)
 {
 	int index = 0;
@@ -34,11 +33,11 @@ int FindClosest2(SDL_Surface *image, int colonne)
 	{
 		index++;
 	}
-	return index-1;
+	return index - 1;
 }
 
 
-
+//We find the highest pixel in the letter
 int FindFurthest2(SDL_Surface *image, int colonne)
 {
 	int height = image -> h;
@@ -47,12 +46,13 @@ int FindFurthest2(SDL_Surface *image, int colonne)
 	{
 		index--;
 	}
-	return index+1;
+	return index + 1;
 }
 
 
-
-void SaveLetter(SDL_Surface * image, int startx, int starty, int width, int height,int letterId, int LineNumber)
+//Function that will save the letter simular proces as in Cutimage
+void SaveLetter(SDL_Surface * image, int startx, int starty,
+int width, int height,int letterId, int LineNumber)
 {
 	SDL_Surface *Result;
 	char buf[200];
@@ -67,82 +67,13 @@ void SaveLetter(SDL_Surface * image, int startx, int starty, int width, int heig
 }
 
 
-/*
-void FindLetter(SDL_Surface *image, int line)
-{
-	int colonne = 0;
-	int maxcolonne = image -> w;
-	int i = 0;
-	while(colonne < maxcolonne)
-	{
-		int WeFoundIt = 0;
-		int howlong = 0;
-		int start = colonne;
-		int deep = 0;
-		int go = 0;
-		printf("Checkpoint 1 : %d\n",colonne);
-		while(IsBlankColonne(image,colonne) == 0 && colonne < maxcolonne)
-		{
-			printf("going up at %d\n",colonne);
-			howlong++;
-			colonne++;
-			deep++;
-			go = 1;
-		}
-
-
-
-		//deep--;
-		//howlong--;
-		//colonne--;
-		
-		int oldfurthest = 0;
-		int oldclosest = image -> h;
-		int keep = howlong;
-
-		while(howlong >= 0)
-		{
-			printf("goin down at %d\n",colonne);
-			int closest = FindClosest2(image,colonne);
-			if(closest < oldclosest)
-			{
-				oldclosest = closest;
-			}
-
-			int furthest = FindFurthest2(image,colonne);
-			if(furthest > oldfurthest)
-			{
-				oldfurthest = furthest;
-			}
-			howlong--;
-			colonne--;
-			WeFoundIt = 1;
-		}
-
-		howlong++;
-		colonne++;
-		
-		printf("Checkpoint2 : %d\n",colonne);
-		if(WeFoundIt ==1)
-		{
-			
-			i++;
-			int newdimensiony = oldfurthest - oldclosest;
-			int newdimensionx = keep - howlong;
-			printf("howlong %d, oldclosest %d , newdimensionx %d, newdimensiony, %d\n",keep,oldclosest,newdimensionx,newdimensiony);
-			SaveLetter(image, start, oldfurthest, newdimensionx, newdimensiony, line, i);
-			WeFoundIt = 0;
-		}
-		if(go == 0)
-		{
-			deep = 1;
-		}
-		colonne += deep;
-	}
-}*/
+//Function that will Find the letter and sends it for chopping
 void FindLetter(SDL_Surface *image , int line)
 {
+//letterID is the letter number colonne is the column
 	int colonne = 0;
+
+//maxcolonne is the width of the line
 	int maxcolonne = image -> w;
 	int letterId = 0;
 	while(colonne < maxcolonne)
@@ -150,20 +81,26 @@ void FindLetter(SDL_Surface *image , int line)
 		while(IsBlankColonne(image,colonne) == 1 && colonne < maxcolonne)
 		{
 			colonne++;
+//Basicly this while the collumn is all white we iterate
 		}
 		if(colonne != maxcolonne)
 		{
+//aslong as we are not at the end of the line we HAVE FOUND A LETTER !
 			int start = colonne;
+//We rememeber where we started
 			while(IsBlankColonne(image,colonne) == 0 && colonne < maxcolonne)
 			{
+//We iterate the columns that have black
 				colonne++;
 			}
 			int yndex = start;
+//Simular to find line we are going to find the furthest and the closest
+//black pixel so we have them as reference for the cutting
 			int closestbot = image -> h;
 			int closesttop = 0;
 			while(yndex != colonne)
 			{
-				printf("closesttop %d , closestbot %d \n",closesttop,closestbot);
+
 				int closesttop1 = FindFurthest2(image,yndex);
 				int closestbot1 = FindClosest2(image,yndex);
 				if(closesttop < closesttop1)
@@ -175,11 +112,11 @@ void FindLetter(SDL_Surface *image , int line)
 					closestbot = closestbot1;
 				}
 				yndex++;
-				printf("closesttop1 %d , closestbot1 %d \n",closesttop1,closestbot1);
+
 			}
 			int width = colonne - start;
 			int height = closesttop - closestbot;
-			printf("hello");
+//We have the letter and iterate the letterID
 			SaveLetter(image,start,closestbot,width,height,line,letterId);
 			letterId++;
 		}

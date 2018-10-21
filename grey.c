@@ -32,7 +32,7 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 		 return 0;
 	}
 }
-void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+void putpixel(SDL_Surface *surface,int x, int y, Uint32 pixel)
 {
 	int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to set */
@@ -104,8 +104,6 @@ void greyscale(imageData *img)
 void BlackOrWhite(imageData *img,float ratio)
 {
 	Uint8 red = 0;
-	Uint8 green = 0;
-	Uint8 blue = 0;
 
 	long i = 0;
 	int x = (img -> image -> w);

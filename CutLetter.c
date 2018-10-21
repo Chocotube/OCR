@@ -11,14 +11,15 @@ int IsBlankColonne(SDL_Surface *image,int colonne)
 {
 	int index = 0;
 	int height = image -> h;
-	while(index <= height && getpixel(image,colonne,index) != 0)
+	while(index <= height && getpixel(image,colonne,index) > 0)
 	{
 
 		index++;
 		printf("colonne %d,%d color : %d\n",colonne,index,getpixel(image,colonne,index));
 	}
-	if(index == height)
+	if(index == height + 1)
 	{
+		printf("colonne %d is blank\n",colonne);
 		return 1;
 	}
 	return 0;
@@ -30,11 +31,11 @@ int FindClosest2(SDL_Surface *image, int colonne)
 {
 	int index = 0;
 	int height = image -> h;
-	while(getpixel(image,colonne,index) != 0)
+	while(getpixel(image,colonne,index) > 0)
 	{
 		index++;
 	}
-	return index;
+	return index-1;
 }
 
 
@@ -42,12 +43,12 @@ int FindClosest2(SDL_Surface *image, int colonne)
 int FindFurthest2(SDL_Surface *image, int colonne)
 {
 	int height = image -> h;
-	int index = height -1;
-	while(getpixel(image,colonne,index) != 0)
+	int index = height;
+	while(getpixel(image,colonne,index) >  0)
 	{
 		index--;
 	}
-	return index + 1;
+	return index+1;
 }
 
 
@@ -67,7 +68,7 @@ void SaveLetter(SDL_Surface * image, int startx, int starty, int width, int heig
 }
 
 
-
+/*
 void FindLetter(SDL_Surface *image, int line)
 {
 	int colonne = 0;
@@ -90,9 +91,11 @@ void FindLetter(SDL_Surface *image, int line)
 			go = 1;
 		}
 
-		deep--;
-		howlong--;
-		colonne--;
+
+
+		//deep--;
+		//howlong--;
+		//colonne--;
 		
 		int oldfurthest = 0;
 		int oldclosest = image -> h;
@@ -125,9 +128,9 @@ void FindLetter(SDL_Surface *image, int line)
 		{
 			
 			i++;
-			int newdimensionx = oldfurthest - oldclosest;
-			int newdimensiony = keep - howlong;
-			printf("oldclosest %d , newdimensionx %d, newdimensiony, %d\n",oldclosest,newdimensionx,newdimensiony);
+			int newdimensiony = oldfurthest - oldclosest;
+			int newdimensionx = keep - howlong;
+			printf("howlong %d, oldclosest %d , newdimensionx %d, newdimensiony, %d\n",keep,oldclosest,newdimensionx,newdimensiony);
 			SaveLetter(image, start, oldfurthest, newdimensionx, newdimensiony, line, i);
 			WeFoundIt = 0;
 		}
@@ -137,5 +140,78 @@ void FindLetter(SDL_Surface *image, int line)
 		}
 		colonne += deep;
 	}
+}*/
+void FindLetter(SDL_Surface *image , int line)
+{
+	int colonne = 0;
+	int maxcolonne = image -> w;
+	int letterId = 0;
+	while(colonne < maxcolonne)
+	{
+		while(IsBlankColonne(image,colonne) == 1 && colonne < maxcolonne)
+		{
+			colonne++;
+		}
+		if(colonne != maxcolonne)
+		{
+			int start = colonne;
+			while(IsBlankColonne(image,colonne) == 0 && colonne < maxcolonne)
+			{
+				colonne++;
+			}
+			int yndex = start;
+			int closestbot = image -> h;
+			int closesttop = 0;
+			while(yndex != colonne)
+			{
+				printf("closesttop %d , closestbot %d \n",closesttop,closestbot);
+				int closesttop1 = FindFurthest2(image,yndex);
+				int closestbot1 = FindClosest2(image,yndex);
+				if(closesttop < closesttop1)
+				{
+					closesttop = closesttop1;
+				}
+				if(closestbot > closestbot1)
+				{
+					closestbot = closestbot1;
+				}
+				yndex++;
+				printf("closesttop1 %d , closestbot1 %d \n",closesttop1,closestbot1);
+			}
+			int width = colonne - start;
+			int height = closesttop - closestbot;
+			printf("hello");
+			SaveLetter(image,start,closestbot,width,height,line,letterId);
+			letterId++;
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
 }
 

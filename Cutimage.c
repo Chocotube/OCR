@@ -66,7 +66,8 @@ int FindFurthest(SDL_Surface *image, int line)
 
 
 
-void CopyAndSaveText(SDL_Surface * image, int startx, int starty, int width, int height, int LineNumber)
+void CopyAndSaveText(SDL_Surface * image, int startx,
+                     int starty, int width, int height, int LineNumber)
 {
 	SDL_Surface *Result;
 	char buf[200];
@@ -142,7 +143,8 @@ void FindText(imageData *img)
 			int newdimensionx = oldfurthest - oldclosest;
 			int newdimensiony = keep - howlong;
 
-			CopyAndSaveText( img -> image, oldclosest, start, newdimensionx , newdimensiony, i);
+			CopyAndSaveText( img -> image, oldclosest, start,
+                             newdimensionx , newdimensiony, i);
 			WefounIt = 0;
 
 		}

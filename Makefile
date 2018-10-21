@@ -12,7 +12,7 @@ Cutimage.o: Cutimage.c Cutimage.h grey.h loadfile.h
 CutLetter.o: CutLetter.c CutLetter.h Cutimage.h grey.h loadfile.h
 	gcc -o CutLetter.o -c CutLetter.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
 
-main.o: main.c loadfile.h grey.h Cutimage.h
+main.o: main.c loadfile.h grey.h Cutimage.h NeuralNet.h
 	gcc -o main.o -c main.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
 
 ocr: blocs.o Cutimage.o CutLetter.o grey.o lines.o loadfile.o main.o pixel.o surf.o

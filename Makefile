@@ -1,26 +1,26 @@
-all: ocr
+CC=gcc
+CFLAGS=`sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+EXEC=ocr
 
-loadfile.o: loadfile.c loadfile.h
-	gcc -o loadfile.o -c loadfile.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+all: $(EXEC)
 
-grey.o: grey.c grey.h loadfile.h
-	gcc -o grey.o -c grey.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+ocr: 
+	$(CC) -o $@ $^ $(CFLAGS)
 
-Cutimage.o: Cutimage.c Cutimage.h grey.h loadfile.h
-	gcc -o Cutimage.o -c Cutimage.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+color.o: color.c color.h surface.h
+	$(CC) -o $@ -c $< $(CFLAGS)
 
-CutLetter.o: CutLetter.c CutLetter.h Cutimage.h grey.h loadfile.h
-	gcc -o CutLetter.o -c CutLetter.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+cut.o: cut.c cut.h surface.h
+	$(CC) -o $@ -c $< $(CFLAGS)
 
-main.o: main.c loadfile.h grey.h Cutimage.h NeuralNet.h
-	gcc -o main.o -c main.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+surface.o: surface.c surface.h
+	$(CC) -o $@ -c $< $(CFLAGS)
 
-ocr: blocs.o Cutimage.o CutLetter.o grey.o lines.o loadfile.o main.o pixel.o surf.o
-	gcc -o ocr *.o `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
-	
-NeuralNet.o : NeuraNet.c NeuralNet.h
-	gcc -o NeuralNet.o -c NeuralNet.c `sdl2-config --libs` -ISDL/SDL2.h -Wall -Wextra -std=c99
+neuralNet.o : neuraNet.c neuralNet.h
+	$(CC) -o $@ -c $< $(CFLAGS)
 
+main.o: main.c surface.h color.h surface.h neuralNet.h
+	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
 	rm -rf *.o

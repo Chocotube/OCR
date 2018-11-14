@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
-#include "loadfile.h"
-#include "grey.h"
-#include "Cutimage.h"
-#include "NeuralNet.h"
+#include "surface.h"
+#include "cut.h"
+#include "color.h"
+#include "neuralNet.h"
 
 
 
@@ -14,7 +14,7 @@ int main()
 	printf("proof of concept AI\n");
 
 	//Shows the neural network understanding the XOR function
-	NeuralNetXOR();
+	neuralNetXOR();
 
 	printf("Now for the Cutting text part\n");
 
@@ -30,10 +30,8 @@ int main()
 	BlackOrWhite(img,0.5f);
 //If ever you have problems getting the black/white constraste right change the
 //0.5f
-	FindText(img);
+	cut(img);
 
-	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva,");
-	printf("jake.penney\n");
+	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return 0;
-
 }

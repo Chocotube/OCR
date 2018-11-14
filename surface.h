@@ -11,11 +11,11 @@ typedef struct
 	char path[];
 }imageData;
 
-int getPixelRed(SDL_Surface *surf, x, y);
-void binVerArray(SDL_Surface *surf, int[] array);
-void binHorArray(SDL_Surface *surf, int[] array);
+int getPixelRed(SDL_Surface *surf, int x, int y);
+void binVerArray(SDL_Surface *surf, int array[]);
+void binHorArray(SDL_Surface *surf, int array[]);
 SDL_Rect makeRectangle(int x ,int y, int w, int h);
-SDL_Surface* cropSurf(SDL_Surface surf, SDL_Rect crop);
+SDL_Surface* cropSurf(SDL_Surface *surf, SDL_Rect crop);
 void saveSurfaceAsBMP(SDL_Surface *surf, int name);
 
 #endif

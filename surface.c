@@ -51,14 +51,14 @@ void Delimage(imageData *img)
     SDL_Quit;
 }*/
 
-int getPixelRed(SDL_Surface *surf, x, y)                            //Returns the value of the red color of the pixel in position x y of the surf
+int getPixelRed(SDL_Surface *surf, int x, int y)                            //Returns the value of the red color of the pixel in position x y of the surf
 {
     Uint32 pixel = surface->pixels[y * loadingSurface->w + x]
     Uint8 *colors = pixel;
     return colors[0];
 }
 
-void binVerArray(SDL_Surface *surf, int[] array)                   //Put the addition of red values of each line in array
+void binVerArray(SDL_Surface *surf, int array[])                   //Put the addition of red values of each line in array
 {
     for (int i = 0; i < surf->h; i++)
     {
@@ -69,7 +69,7 @@ void binVerArray(SDL_Surface *surf, int[] array)                   //Put the add
     }
 }
 
-void binHorArray(SDL_Surface *surf, int[] array)                   //Put the addition of red values of each colone in array
+void binHorArray(SDL_Surface *surf, int array[])                   //Put the addition of red values of each colone in array
 {
     for (int i = 0; i < surf->w; i++)
     {
@@ -90,7 +90,7 @@ SDL_Rect makeRectangle(int x ,int y, int w, int h)                  //Returns an
     return res;
 }
 
-SDL_Surface* cropSurf(SDL_Surface surf, SDL_Rect crop)              //Return the surface cropped with the given rectangle
+SDL_Surface* cropSurf(SDL_Surface *surf, SDL_Rect crop)              //Return the surface cropped with the given rectangle
 {
     SDL_Surface *res = SDL_CreateRGBSurface( 0, crop.w, crop.h, 32, 0, 0, 0, 0);
     SDL_Rect rect;

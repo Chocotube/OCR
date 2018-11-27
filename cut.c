@@ -86,7 +86,7 @@ void cut(SDL_Surface *surf)
                     verlast = i;
                 i++;
             }
-            printf("\nDone bloc : i = %d\n", i);
+            printf("\nDone bloc : n = %d\n", n);
             n = cutLines(cropSurf(surf, makeRectangle(horfirst, verfirst, horlast-horfirst, verlast-verfirst)), n);
             n++;
         }
@@ -105,7 +105,6 @@ int cutLines(SDL_Surface *surf, int n)
     binVerArray(surf, ver);
     int last = verLen;
     int i = 0;
-    int n = 0;
     while (i < verLen)
     {
         while (i < verLen && ver[i] == 0)
@@ -119,7 +118,7 @@ int cutLines(SDL_Surface *surf, int n)
             last = i;
         }
         printf("\nDone line : n = %d\n", n);
-        n = cutWords(cropSurf(surf, makeRectangle(0, first, surf->w, last-first)));
+        n = cutWords(cropSurf(surf, makeRectangle(0, first, surf->w, last-first)), n);
         n++;
         saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 255, 255, 255, 0), n);
     }
@@ -140,7 +139,6 @@ int cutWords(SDL_Surface *surf, int n)
     int first = 0;
     int last = horLen;
     int i = 0;
-    int n = 0;
 
 
     int spacings[2] = {0,0};                //Define spacing
@@ -225,7 +223,7 @@ int cutLetters(SDL_Surface *surf, int n)
         }
         n++;
         printf("\nDone letter : n = %d\nBounds = (%d, %d)\n", n, first, last);
-        saveSurfaceAsBMP(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h)), i);
+        saveSurfaceAsBMP(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h)), n);
     }
     printf("\nDone letter FINAL\n");
     return n;

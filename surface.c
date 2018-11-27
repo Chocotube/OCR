@@ -12,32 +12,6 @@ SDL_Surface* LoadImage(char path[])     //Returns the sdl surface of the BMP giv
     }
     return res;
 }
-/*
-void Delimage(imageData *img) 
-//This is the idle function and waits for the user to shut the image
-{
-    int end = 0;
-    SDL_Event event;
-
-    while (end == 0) //Waiting for user to do something
-    {
-        SDL_WaitEvent(&event);
-
-        if(event.type == SDL_QUIT) //If the user wa
-        nts to quit we destroy everything
-        {
-            end = 1;
-        }
-        SDL_RenderCopy(img -> renderer,img -> texture, NULL, NULL);
-        SDL_RenderPresent(img -> renderer);
-    }
-    SDL_DestroyTexture(img -> texture);
-    SDL_FreeSurface(img -> image);
-    SDL_DestroyRenderer(img -> renderer);
-    SDL_DestroyWindow(img -> window);
-
-    SDL_Quit;
-}*/
 
 //This is a function using SDL to return the pixel at a certin xy
 Uint32 getpixel(SDL_Surface *surface, int x, int y)

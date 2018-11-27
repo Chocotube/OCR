@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	surf = greyScale(surf);
     float ratio = atof(argv[2]);
 	surf = blackAndWhite(surf,0.5f);
-    saveSurfaceAsBMP(surf, 5);
+    saveSurfaceAsBMP(surf, 0);
 	cut(surf);
     printf("Done cut\n");
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");

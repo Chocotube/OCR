@@ -11,6 +11,9 @@ typedef struct
 	char path[];
 }imageData;
 
+SDL_Surface* LoadImage(char path[]);
+Uint32 getpixel(SDL_Surface *surface, int x, int y);
+void putPixel(SDL_Surface *surface,int x, int y, Uint32 pixel);
 int getPixelRed(SDL_Surface *surf, int x, int y);
 void binVerArray(SDL_Surface *surf, int array[]);
 void binHorArray(SDL_Surface *surf, int array[]);

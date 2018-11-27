@@ -3,26 +3,14 @@
 #include <SDL2/SDL.h>
 #include "surface.h"
 
-void Loadimage(imageData *img)                                                //Opens an image and gives an sdl surface in the image data struct
+SDL_Surface* LoadImage(char path[])     //Returns the sdl surface of the BMP given in the path
 {
-
-    //SDL_Init(SDL_INIT_VIDEO);
-    printf("%s","Bonjour mettez le nom du fichier que vous voulez ouvrir : ");      //Ask the path to the user
-    scanf("%s",img -> path);
-
-    //img -> window = SDL_CreateWindow(img -> path, SDL_WINDOWPOS_UNDEFINED,
-    //SDL_WINDOWPOS_UNDEFINED,640,480,0);//Creates the window
-    //img -> renderer = SDL_CreateRenderer(img -> window, -1, 0); //Creates
-    //the renderer for the image
-
-    img -> image = SDL_LoadBMP(img -> path);                                        //Loads the image
-    /*img -> texture = SDL_CreateTextureFromSurface(img -> renderer, 
-     * img -> image);//Puts the texture in the window
-    if(img -> image = NULL) //If we can't find the image sdl will give an Error
+    SDL_Surface *res =  SDL_LoadBMP(path);
+    if (res == NULL)
     {
-        printf("%s\n","Error :");
-        SDL_GetError();
-    }*/
+        printf("The file either does not exist or is not a correct bitmap\n");
+    }
+    return res;
 }
 /*
 void Delimage(imageData *img) 
@@ -51,21 +39,110 @@ void Delimage(imageData *img)
     SDL_Quit;
 }*/
 
+//This is a function using SDL to return the pixel at a certin xy
+Uint32 getpixel(SDL_Surface *surface, int x, int y)
+{
+
+//This line checks the form of the pixel
+	int bpp = surface->format->BytesPerPixel;
+
+//This line gets the pixel
+	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+	switch(bpp)
+	{
+
+//8 bit
+	case 1:
+		return *p;
+		break;
+
+
+//16 bit
+	case 2:
+		return *(Uint16 *)p;
+		break;
+
+//Case for 24 bit pixels
+	case 3:
+		if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			return p[0] << 16 | p[1] << 8 | p[2];
+		else
+			return p[0] | p[1] << 8 | p[2] << 16;
+		break;
+
+//32 bit
+	case 4:
+		return *(Uint32 *)p;
+		break;
+
+	default:
+		 return 0;
+	}
+}
+
+
+//Function that puts a pixel in a certain spot on the SDL surface
+void putPixel(SDL_Surface *surface,int x, int y, Uint32 pixel)
+{
+	int bpp = surface->format->BytesPerPixel;
+//Here p is the address to the pixel we want to set
+	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+//A case for each how many bytes the pixels have
+	switch(bpp){
+	case 1:
+		*p = pixel;
+		break;
+	case 2:
+		*(Uint16 *)p = pixel;
+		break;
+
+	case 3:
+		if(SDL_BYTEORDER == SDL_BIG_ENDIAN){
+			p[0] = (pixel >> 16) & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = pixel & 0xff;
+			}
+			else
+			{
+			p[0] = pixel & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = (pixel >> 16) & 0xff;
+			}
+		break;
+
+	case 4:
+		*(Uint32 *)p = pixel;
+		break;
+	}
+}
+
 int getPixelRed(SDL_Surface *surf, int x, int y)                            //Returns the value of the red color of the pixel in position x y of the surf
 {
-    Uint32 pixel = surface->pixels[y * loadingSurface->w + x]
-    Uint8 *colors = pixel;
-    return colors[0];
+    int res = 1;
+    if (getpixel(surf, x, y) >> 16 != 0)
+        res = 0;
+    return res;
 }
 
 void binVerArray(SDL_Surface *surf, int array[])                   //Put the addition of red values of each line in array
 {
     for (int i = 0; i < surf->h; i++)
     {
+        printf("%d, ", array[i]);
+    }
+    for (int i = 0; i < surf->h; i++)
+    {
         for (int j = 0; j < surf->w; j++)
         {
-            array[i] += getPixelRed(surf, i, j);
+            array[i] += getPixelRed(surf, j, i);
         }
+    }
+    printf("\n\n\n");
+    for (int i = 0; i < surf->h; i++)
+    {
+        printf("%d, ", array[i]);
     }
 }
 
@@ -73,10 +150,19 @@ void binHorArray(SDL_Surface *surf, int array[])                   //Put the add
 {
     for (int i = 0; i < surf->w; i++)
     {
+        printf("%d, ", array[i]);
+    }
+    for (int i = 0; i < surf->w; i++)
+    {
         for (int j = 0; j < surf->h; j++)
         {
             array[i] += getPixelRed(surf, i, j);
         }
+    }
+    printf("\n\n\n");
+    for (int i = 0; i < surf->w; i++)
+    {
+        printf("%d, ", array[i]);
     }
 }
 
@@ -93,16 +179,13 @@ SDL_Rect makeRectangle(int x ,int y, int w, int h)                  //Returns an
 SDL_Surface* cropSurf(SDL_Surface *surf, SDL_Rect crop)              //Return the surface cropped with the given rectangle
 {
     SDL_Surface *res = SDL_CreateRGBSurface( 0, crop.w, crop.h, 32, 0, 0, 0, 0);
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    SDL_BlitSurface(surf, &crop, res, &rect);
+    SDL_BlitSurface(surf, &crop, res, NULL);
     return res;
 }
 
 void saveSurfaceAsBMP(SDL_Surface *surf, int name)                  //Saves the surface as a BMP named name.bmp
 {
-    char[sizeof(int) + 4 * sizeof(char)] strName;
+    char strName[sizeof(int) + 4 * sizeof(char)];
     sprintf(strName, "%d.bmp", name);
     SDL_SaveBMP(surf, strName);
 }

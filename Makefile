@@ -16,7 +16,7 @@ cut.o: cut.c cut.h surface.h
 surface.o: surface.c surface.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
-neuralNet.o : neuraNet.c neuralNet.h
+neuralNet.o: neuraNet.c neuralNet.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:

@@ -104,10 +104,7 @@ void binVerArray(SDL_Surface *surf, int array[])                   //Put the add
 {
     for (int i = 0; i < surf->h; i++)
     {
-        printf("%d, ", array[i]);
-    }
-    for (int i = 0; i < surf->h; i++)
-    {
+        array[i] = 0;
         for (int j = 0; j < surf->w; j++)
         {
             array[i] += getPixelRed(surf, j, i);
@@ -124,10 +121,7 @@ void binHorArray(SDL_Surface *surf, int array[])                   //Put the add
 {
     for (int i = 0; i < surf->w; i++)
     {
-        printf("%d, ", array[i]);
-    }
-    for (int i = 0; i < surf->w; i++)
-    {
+        array[i] = 0;
         for (int j = 0; j < surf->h; j++)
         {
             array[i] += getPixelRed(surf, i, j);
@@ -157,9 +151,16 @@ SDL_Surface* cropSurf(SDL_Surface *surf, SDL_Rect crop)              //Return th
     return res;
 }
 
-void saveSurfaceAsBMP(SDL_Surface *surf, int name)                  //Saves the surface as a BMP named name.bmp
+void saveSurfaceAsBMP(SDL_Surface *surf, int name, int type)       //Saves the surface as a BMP named name.bmp
 {
-    char strName[sizeof(int) + 4 * sizeof(char)];
-    sprintf(strName, "%d.bmp", name);
+    char strName[sizeof(int) + 16 * sizeof(char)];
+    if (type == 1)
+        sprintf(strName, "./Letters/%d_s.bmp", name);
+    else if (type == 2)
+        sprintf(strName, "./Letters/%d_r.bmp", name);
+    else if (type == 3)
+        sprintf(strName, "./Letters/%d_b.bmp", name);
+    else
+        sprintf(strName, "./Letters/%d_l.bmp", name);
     SDL_SaveBMP(surf, strName);
 }

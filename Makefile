@@ -20,4 +20,4 @@ neuralNet.o: neuraNet.c neuralNet.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	rm -rf *.o
+	rm -rf *.o main ./Letters/*.bmp

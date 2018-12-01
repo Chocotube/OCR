@@ -18,9 +18,9 @@ int main(int argc, char *argv[])
     SDL_Surface *surf = LoadImage(argv[1]);
 	surf = greyScale(surf);
     float ratio = atof(argv[2]);
-	surf = blackAndWhite(surf,0.5f);
+	surf = blackAndWhite(surf, ratio);
+    saveSurfaceAsBMP(surf, 0, 0);
 	cut(surf);
-    printf("Done cut\n");
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return res;
 }

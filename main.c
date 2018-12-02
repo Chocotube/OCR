@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     float ratio = atof(argv[2]);
 	surf = blackAndWhite(surf, ratio);
     saveSurfaceAsBMP(surf, 0, 0);
-	cut(surf);
-    rebuild();
+	int n = cut(surf);
+    rebuild(n);
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return res;
 }

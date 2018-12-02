@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include "surface.h"
 #include "cut.h"
+#include "resize.h"
 
 int cut(SDL_Surface *surf)
 {
@@ -114,9 +115,10 @@ int cut(SDL_Surface *surf)
                 j++;
             }
             n = cutLines(cropSurf(surf, makeRectangle(horfirst, verfirst, horlast-horfirst, verlast-verfirst)), n);
+            printf("hey\n");
             n++;
             printf("\nDone bloc : n = %d\n", n);
-            saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 0, 0, 0, 0), n, 3);
+            saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 30, 30, 32, 0, 0, 0, 0), n, 3);
             horfirst = i;
             while (i < horLen && hor[i] == 0)
             {
@@ -142,6 +144,8 @@ int cutLines(SDL_Surface *surf, int n)
     int i = 0;
     while (i < verLen)
     {
+        int hasText = 0;
+        printf("and again\n");
         while (i < verLen && ver[i] == 0)
         {
             i++;
@@ -151,13 +155,21 @@ int cutLines(SDL_Surface *surf, int n)
         {
             i++;
             last = i;
+            hasText = 1;
         }
-        printf("\nDone line : n = %d\n", n);
-        n = cutWords(cropSurf(surf, makeRectangle(0, first, surf->w, last-first)), n);
-        n++;
-        saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 0, 0, 0, 0), n, 2);
+        if (hasText)
+        {
+            printf("\nDone line : n = %d\n", n);
+            n = cutWords(cropSurf(surf, makeRectangle(0, first, surf->w, last-first)), n);
+            printf("suup bro\n");
+            n++;
+            printf("we're all good\n");
+            saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 30, 30, 32, 0, 0, 0, 0), n, 2);
+            printf("but this is killing me\n");
+        }
     }
     printf("\nDone line FINAL with n = %d\n", n);
+    printf("omega\n");
     return n;
     free(ver);
 }
@@ -264,7 +276,7 @@ int cutLetters(SDL_Surface *surf, int n)
         }
         n++;
         printf("\nDone letter : n = %d\nBounds = (%d, %d)\n", n, first, last);
-        saveSurfaceAsBMP(eatBlank(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h))), n, 0);
+        saveSurfaceAsBMP(resize(eatBlank(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h))), 30, 30), n, 0);
     }
     printf("\nDone letter FINAL with n = %d\n", n);
     return n;

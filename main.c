@@ -8,6 +8,7 @@
 #include "neuralNet.h"
 #include "text.h"
 #include "resize.h"
+#include "app.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,8 +26,8 @@ int main(int argc, char *argv[])
 	int n = cut(surf);
     char *str = malloc(sizeof(char) * n);
     puts(str);
-    rebuild(n, 445, str);
-    //printf("%d\n", (int)&str);
+    printf("%d\n", (int)&str);
+    str = rebuild(n, 445, str);
     puts(str);
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return res;

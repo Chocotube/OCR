@@ -8,9 +8,8 @@
 
 char findChar(char path[])
 {
-    char res = ' ';
+    char res;
     int i = 0;
-    printf("\npath is : %s\n", path);
     while (path[i] != '\0' && path[i] != '_')
     {
         i++;
@@ -19,21 +18,25 @@ char findChar(char path[])
     {
         char type = path[i+1];
         if (type == 'l')
-            res = 'l';//ocr_neuralnet(net, surfToArr(LoadImage(path)));
+        {
+            int array[900];
+            surfToArr(LoadImage(path), array);
+            res = ocr_neuralnet(net, array);
+        }
         else if (type == 's')
-            res = 's';
+            res = ' ';
         else if (type == 'r')
-            res = 'r';
+            res = '\n';
         else if (type == 'b')
-            res = 'b';
+            res = '\n';
     }
-    printf("char is : %c\n", res);
     return res;
 }
 
-void rebuild(int n, int max, char *res)
+char* rebuild(int n, char *res)
 {
-    char *array[n];
+    char *array[n+3];
+    printf("%d\n", (int)&res);
     struct dirent *de;
     DIR *dr = opendir("./Letters");
     if (dr == NULL)
@@ -47,19 +50,19 @@ void rebuild(int n, int max, char *res)
         array[i] = de->d_name;
         i++;
     }
-    sort(array, n);
-    for (int i = 0; i < n; i++)
+    sort(array, n+3);
+    for (int i = 0; i < n+3; i++)
     {
         puts(array[i]);
     }
-    for (int i = 0; i < n; i++)
+    int j = 0;
+    for (int i = 3; i < n; i++)
     {
-        *res = findChar(array[i]);
-        printf("char is : %c\n", *res);
-        res++;
+        res[j] = findChar(array[i]);
+        j++;
     }
     closedir(dr);
-    printf("%d\n", (int)&res);
+    return res;
 }
 
 void swap(char **a, char **b)

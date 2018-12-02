@@ -18,7 +18,11 @@ char findChar(char path[])
     {
         char type = path[i+1];
         if (type == 'l')
-            res = 'l';//ocr_neuralnet(net, surfToArr(LoadImage(path)));
+        {
+            int array[900];
+            surfToArr(LoadImage(path), array);
+            res = ocr_neuralnet(net, array);
+        }
         else if (type == 's')
             res = ' ';
         else if (type == 'r')
@@ -29,7 +33,7 @@ char findChar(char path[])
     return res;
 }
 
-char* rebuild(int n, int max, char *res)
+char* rebuild(int n, char *res)
 {
     char *array[n+3];
     printf("%d\n", (int)&res);

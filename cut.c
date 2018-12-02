@@ -114,6 +114,7 @@ int cut(SDL_Surface *surf)
                 j++;
             }
             n = cutLines(cropSurf(surf, makeRectangle(horfirst, verfirst, horlast-horfirst, verlast-verfirst)), n);
+            printf("hey\n");
             n++;
             printf("\nDone bloc : n = %d\n", n);
             saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 0, 0, 0, 0), n, 3);
@@ -142,6 +143,8 @@ int cutLines(SDL_Surface *surf, int n)
     int i = 0;
     while (i < verLen)
     {
+        int hasText = 0;
+        printf("and again\n");
         while (i < verLen && ver[i] == 0)
         {
             i++;
@@ -151,13 +154,21 @@ int cutLines(SDL_Surface *surf, int n)
         {
             i++;
             last = i;
+            hasText = 1;
         }
-        printf("\nDone line : n = %d\n", n);
-        n = cutWords(cropSurf(surf, makeRectangle(0, first, surf->w, last-first)), n);
-        n++;
-        saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 0, 0, 0, 0), n, 2);
+        if (hasText)
+        {
+            printf("\nDone line : n = %d\n", n);
+            n = cutWords(cropSurf(surf, makeRectangle(0, first, surf->w, last-first)), n);
+            printf("suup bro\n");
+            n++;
+            printf("we're all good\n");
+            saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 0, 0, 0, 0), n, 2);
+            printf("but this is killing me\n");
+        }
     }
     printf("\nDone line FINAL with n = %d\n", n);
+    printf("omega\n");
     return n;
     free(ver);
 }

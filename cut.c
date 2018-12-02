@@ -67,7 +67,6 @@ int cut(SDL_Surface *surf)
     }
     int spacing;
     spacing = (spacings1 + spacings2);
-    printf("\n[%d, %d] = %d\n", spacings1, spacings2, spacing);
 
 
     binHorArray(surf, hor);
@@ -99,7 +98,6 @@ int cut(SDL_Surface *surf)
         }
         if ((space >= spacing || i >= horLen) && hasText)        //Find vertical bounds
         {
-            printf("len = %d\n", verLen);
             binVerArray(surf, ver);
             verfirst = 0, verlast = 0;
             int j = 0;
@@ -115,9 +113,7 @@ int cut(SDL_Surface *surf)
                 j++;
             }
             n = cutLines(cropSurf(surf, makeRectangle(horfirst, verfirst, horlast-horfirst, verlast-verfirst)), n);
-            printf("hey\n");
             n++;
-            printf("\nDone bloc : n = %d\n", n);
             saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 30, 30, 32, 0, 0, 0, 0), n, 3);
             horfirst = i;
             while (i < horLen && hor[i] == 0)
@@ -126,10 +122,7 @@ int cut(SDL_Surface *surf)
                 horfirst++;
             }
         }
-        printf("n = %d\n", n);
     }
-    printf("\nDone bloc FINAL\n");
-    printf("\n[%d, %d] = %d\n", spacings1, spacings2, spacing);
     return n;
     free(hor);
     free(ver);
@@ -145,7 +138,6 @@ int cutLines(SDL_Surface *surf, int n)
     while (i < verLen)
     {
         int hasText = 0;
-        printf("and again\n");
         while (i < verLen && ver[i] == 0)
         {
             i++;
@@ -159,17 +151,11 @@ int cutLines(SDL_Surface *surf, int n)
         }
         if (hasText)
         {
-            printf("\nDone line : n = %d\n", n);
             n = cutWords(cropSurf(surf, makeRectangle(0, first, surf->w, last-first)), n);
-            printf("suup bro\n");
             n++;
-            printf("we're all good\n");
             saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 30, 30, 32, 0, 0, 0, 0), n, 2);
-            printf("but this is killing me\n");
         }
     }
-    printf("\nDone line FINAL with n = %d\n", n);
-    printf("omega\n");
     return n;
     free(ver);
 }
@@ -177,7 +163,6 @@ int cutLines(SDL_Surface *surf, int n)
 int cutWords(SDL_Surface *surf, int n)
 {
     int horLen = surf->w;
-    printf("len = %d\n", horLen);
     int *hor = malloc(sizeof(int) * horLen);
     binHorArray(surf, hor);
     int first = 0;
@@ -219,8 +204,6 @@ int cutWords(SDL_Surface *surf, int n)
         spacing = spacings[0]*2;
     else
         spacing = (spacings[0] + spacings[1])/2;
-    printf("\n[%d, %d] = %d\n", spacings[0], spacings[1], spacing);
-
 
     while (i < horLen)
     {
@@ -237,8 +220,6 @@ int cutWords(SDL_Surface *surf, int n)
         }
         if (space >= spacing || i >= horLen)        //Find vertical bounds
         {
-            printf("first = %d\n", first);
-            printf("\nDone word : n = %d\nBounds = (%d, %d)\n", n, first, last);
             n = cutLetters(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h)), n);
             n++;
             saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 0, 0, 0, 0), n, 1);
@@ -250,7 +231,6 @@ int cutWords(SDL_Surface *surf, int n)
             }
         }
     }
-    printf("\nDone word FINAL with n = %d\n", n);
     return n;
     free(hor);
 }
@@ -275,10 +255,8 @@ int cutLetters(SDL_Surface *surf, int n)
             last = i;
         }
         n++;
-        printf("\nDone letter : n = %d\nBounds = (%d, %d)\n", n, first, last);
         saveSurfaceAsBMP(resize(eatBlank(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h))), 30, 30), n, 0);
     }
-    printf("\nDone letter FINAL with n = %d\n", n);
     return n;
     free(hor);
 }

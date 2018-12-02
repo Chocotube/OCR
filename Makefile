@@ -27,5 +27,8 @@ text.o: text.c text.h surface.h
 app.o: app.c app.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
+resize.o: resize.c resize.h
+	$(CC) -o $@ -c $< $(CFLAGS)
+
 clean:
 	rm -rf *.o main ./Letters/*.bmp

@@ -7,6 +7,7 @@
 #include "color.h"
 #include "neuralNet.h"
 #include "text.h"
+#include "resize.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +26,7 @@ int main(int argc, char *argv[])
     char *str = malloc(sizeof(char) * n);
     puts(str);
     rebuild(n, 445, str);
-    printf("%d\n", (int)&str);
+    //printf("%d\n", (int)&str);
     puts(str);
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return res;

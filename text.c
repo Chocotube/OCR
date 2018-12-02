@@ -8,52 +8,81 @@
 
 char findChar(char path[])
 {
-    while (path[i] != "\0" && path[i] != "_")
+    char res = ' ';
+    int i = 0;
+    printf("\npath is : %s\n", path);
+    while (path[i] != '\0' && path[i] != '_')
     {
         i++;
     }
-    if (path[i] == "_")
+    if (path[i] == '_')
     {
         char type = path[i+1];
-        if (type == "l")
-            res = ocr_neuralnet(net, 
-        else if (type == "s")
-            res = " ";
-        else if (type == "r")
-            res = "\n";
-        else if (type == "b")
-            res = "\n\n\n";
-        
-    return "c";
+        if (type == 'l')
+            res = 'l';//ocr_neuralnet(net, surfToArr(LoadImage(path)));
+        else if (type == 's')
+            res = 's';
+        else if (type == 'r')
+            res = 'r';
+        else if (type == 'b')
+            res = 'b';
+    }
+    printf("char is : %c\n", res);
+    return res;
 }
 
-int rebuild(int n, int max)
+void rebuild(int n, int max, char *res)
 {
-    char *array[] = malloc(sizeof(char) * n * sizeof(char) * max);
+    char *array[n];
     struct dirent *de;
     DIR *dr = opendir("./Letters");
     if (dr == NULL)
     {
         printf("Could not open current directory" );
-        return 0;
     }
     int i = 0;
     while ((de = readdir(dr)) != NULL)
     {
+        puts(de->d_name);
         array[i] = de->d_name;
         i++;
     }
     sort(array, n);
+    for (int i = 0; i < n; i++)
+    {
+        puts(array[i]);
+    }
+    for (int i = 0; i < n; i++)
+    {
+        *res = findChar(array[i]);
+        printf("char is : %c\n", *res);
+        res++;
+    }
     closedir(dr);
-    return 0;
+    printf("%d\n", (int)&res);
 }
 
-static int myCompare (const void * a, const void * b)
+void swap(char **a, char **b)
 {
-    return strcmp (*(const char **) a, *(const char **) b);
+    char *temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-void sort(const char *arr[], int n) 
+void sort(char **m, int dim)
 {
-    qsort (arr, n, sizeof (const char *), myCompare);
+    int i, j, flag=1;
+
+    for(i=0; i<dim-1 && flag==1; i++)
+    {
+        flag=0;
+        for(j=0; j<dim-1; j++)
+        {
+            if(strcmp(m[j],m[j+1])>0)
+            {
+                swap(&m[j],&m[j+1]);
+                flag=1;
+            }
+        }
+    }
 }

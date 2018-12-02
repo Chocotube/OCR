@@ -22,7 +22,12 @@ int main(int argc, char *argv[])
 	surf = blackAndWhite(surf, ratio);
     saveSurfaceAsBMP(surf, 0, 0);
 	int n = cut(surf);
-    rebuild(n);
+    char *str = malloc(sizeof(char) * n);
+    puts(str);
+    rebuild(n, 445, str);
+    printf("%d\n", (int)&str);
+    puts(str);
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return res;
+    free(str);
 }

@@ -153,19 +153,20 @@ SDL_Surface* cropSurf(SDL_Surface *surf, SDL_Rect crop)              //Return th
 
 void saveSurfaceAsBMP(SDL_Surface *surf, int name, int type)       //Saves the surface as a BMP named name.bmp
 {
-    char strName[sizeof(int) + 16 * sizeof(char)];
+    
+    char strName[sizeof(int) + 26 * sizeof(char)];
     if (type == 1)
-        sprintf(strName, "./Letters/%d_s.bmp", name);
+        sprintf(strName, "./Letters/%010d_s.bmp", name);
     else if (type == 2)
-        sprintf(strName, "./Letters/%d_r.bmp", name);
+        sprintf(strName, "./Letters/%010d_r.bmp", name);
     else if (type == 3)
-        sprintf(strName, "./Letters/%d_b.bmp", name);
+        sprintf(strName, "./Letters/%010d_b.bmp", name);
     else
-        sprintf(strName, "./Letters/%d_l.bmp", name);
+        sprintf(strName, "./Letters/%010d_l.bmp", name);
     SDL_SaveBMP(surf, strName);
 }
 
-void surfToArr(SDL_Surface *surf, int array[])
+void surfToArr(SDL_Surface *surf, double array[])
 {
     for (int i = 0; i < surf->h; i++)
     {

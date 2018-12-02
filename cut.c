@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include "surface.h"
 #include "cut.h"
+#include "resize.h"
 
 int cut(SDL_Surface *surf)
 {
@@ -117,7 +118,7 @@ int cut(SDL_Surface *surf)
             printf("hey\n");
             n++;
             printf("\nDone bloc : n = %d\n", n);
-            saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 0, 0, 0, 0), n, 3);
+            saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 30, 30, 32, 0, 0, 0, 0), n, 3);
             horfirst = i;
             while (i < horLen && hor[i] == 0)
             {
@@ -163,7 +164,7 @@ int cutLines(SDL_Surface *surf, int n)
             printf("suup bro\n");
             n++;
             printf("we're all good\n");
-            saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 100, 100, 32, 0, 0, 0, 0), n, 2);
+            saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 30, 30, 32, 0, 0, 0, 0), n, 2);
             printf("but this is killing me\n");
         }
     }
@@ -275,7 +276,7 @@ int cutLetters(SDL_Surface *surf, int n)
         }
         n++;
         printf("\nDone letter : n = %d\nBounds = (%d, %d)\n", n, first, last);
-        saveSurfaceAsBMP(eatBlank(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h))), n, 0);
+        saveSurfaceAsBMP(resize(eatBlank(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h))), 30, 30), n, 0);
     }
     printf("\nDone letter FINAL with n = %d\n", n);
     return n;

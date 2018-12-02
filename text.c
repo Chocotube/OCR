@@ -24,7 +24,7 @@ char findChar(char path[])
         else if (type == 'r')
             res = '\n';
         else if (type == 'b')
-            res = 'b';
+            res = '\n';
     }
     return res;
 }

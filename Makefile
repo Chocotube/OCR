@@ -6,7 +6,7 @@ EXEC=main
 
 all: $(EXEC)
 
-main: main.c surface.o color.o cut.o text.o app.o
+main: main.c surface.o color.o cut.o text.o app.o resize.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
 color.o: color.c color.h surface.h

@@ -2,7 +2,7 @@
 #define TEXT_H
 
 char findChar(char path[]);
-char* rebuild(int n, int max, char *res);
+char* rebuild(int n, char *res);
 void sort(char **arr, int n);
 
 #endif 

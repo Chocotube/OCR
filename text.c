@@ -19,9 +19,9 @@ char findChar(char path[])
         char type = path[i+1];
         if (type == 'l')
         {
-            int array[900];
-            surfToArr(LoadImage(path), array);
-            res = ocr_neuralnet(array);
+            //int array[900];
+            //surfToArr(LoadImage(path), array);
+            res = 'l';//ocr_neuralnet(array);
         }
         else if (type == 's')
             res = ' ';

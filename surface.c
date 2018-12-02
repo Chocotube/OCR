@@ -110,11 +110,6 @@ void binVerArray(SDL_Surface *surf, int array[])                   //Put the add
             array[i] += getPixelRed(surf, j, i);
         }
     }
-    printf("\n\n\n");
-    for (int i = 0; i < surf->h; i++)
-    {
-        printf("%d, ", array[i]);
-    }
 }
 
 void binHorArray(SDL_Surface *surf, int array[])                   //Put the addition of red values of each colone in array
@@ -126,11 +121,6 @@ void binHorArray(SDL_Surface *surf, int array[])                   //Put the add
         {
             array[i] += getPixelRed(surf, i, j);
         }
-    }
-    printf("\n\n\n");
-    for (int i = 0; i < surf->w; i++)
-    {
-        printf("%d, ", array[i]);
     }
 }
 

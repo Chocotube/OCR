@@ -36,7 +36,6 @@ char findChar(char path[])
 char* rebuild(int n, char *res)
 {
     char *array[n+3];
-    printf("%d\n", (int)&res);
     struct dirent *de;
     DIR *dr = opendir("./Letters");
     if (dr == NULL)
@@ -51,10 +50,6 @@ char* rebuild(int n, char *res)
         i++;
     }
     sort(array, n+3);
-    for (int i = 0; i < n+3; i++)
-    {
-        puts(array[i]);
-    }
     int j = 0;
     for (int i = 3; i < n; i++)
     {

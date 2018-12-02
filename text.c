@@ -21,7 +21,7 @@ char findChar(char path[])
         {
             int array[900];
             surfToArr(LoadImage(path), array);
-            res = ocr_neuralnet(net, array);
+            res = ocr_neuralnet(array);
         }
         else if (type == 's')
             res = ' ';

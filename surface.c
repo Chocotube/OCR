@@ -164,3 +164,14 @@ void saveSurfaceAsBMP(SDL_Surface *surf, int name, int type)       //Saves the s
         sprintf(strName, "./Letters/%d_l.bmp", name);
     SDL_SaveBMP(surf, strName);
 }
+
+void surfToArr(SDL_Surface *surf, int array[])
+{
+    for (int i = 0; i < surf->h; i++)
+    {
+        for (int j = 0; j < surf->w; j++)
+        {
+            array[i] = !getPixelRed(surf, j, i);
+        }
+    }
+}

@@ -6,6 +6,7 @@
 #include "cut.h"
 #include "color.h"
 #include "neuralNet.h"
+#include "text.h"
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
 	surf = blackAndWhite(surf, ratio);
     saveSurfaceAsBMP(surf, 0, 0);
 	cut(surf);
+    rebuild();
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return res;
 }

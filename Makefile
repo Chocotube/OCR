@@ -4,7 +4,7 @@ EXEC=main
 
 all: $(EXEC)
 
-main: main.c surface.o color.o cut.o
+main: main.c surface.o color.o cut.o text.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
 color.o: color.c color.h surface.h
@@ -17,6 +17,9 @@ surface.o: surface.c surface.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 neuralNet.o: neuraNet.c neuralNet.h
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+text.o: text.c text.h surface.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:

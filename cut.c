@@ -4,7 +4,7 @@
 #include "surface.h"
 #include "cut.h"
 
-void cut(SDL_Surface *surf)
+int cut(SDL_Surface *surf)
 {
     int verLen = surf->h;
     int *ver = malloc(sizeof(int) * verLen);
@@ -128,6 +128,9 @@ void cut(SDL_Surface *surf)
     }
     printf("\nDone bloc FINAL\n");
     printf("\n[%d, %d] = %d\n", spacings1, spacings2, spacing);
+    return n;
+    free(hor);
+    free(ver);
 }
 
 int cutLines(SDL_Surface *surf, int n)
@@ -156,6 +159,7 @@ int cutLines(SDL_Surface *surf, int n)
     }
     printf("\nDone line FINAL with n = %d\n", n);
     return n;
+    free(ver);
 }
 
 int cutWords(SDL_Surface *surf, int n)
@@ -236,6 +240,7 @@ int cutWords(SDL_Surface *surf, int n)
     }
     printf("\nDone word FINAL with n = %d\n", n);
     return n;
+    free(hor);
 }
 
 int cutLetters(SDL_Surface *surf, int n)
@@ -263,6 +268,7 @@ int cutLetters(SDL_Surface *surf, int n)
     }
     printf("\nDone letter FINAL with n = %d\n", n);
     return n;
+    free(hor);
 }
 
 SDL_Surface *eatBlank(SDL_Surface *surf)

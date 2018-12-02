@@ -4,55 +4,92 @@
 #include "surface.h"
 //#include "color.h"
 
+void printsdlsurface(SDL_Surface * surface)
+{
+	int width =  surface -> w;
+	int height = surface -> h;
+	int j = 0;
+	while(j < height)
+	{
+		int i = 0;
+		while(i <  width)
+		{
+			printf("%d ",(int) getpixel(surface,i,j));
+			++i;
+		}
+		printf("\n");
+		++j;
+	}
+
+}
+
+
 SDL_Surface* resize(SDL_Surface* before,int maxX , int maxY)
 {
-	SDL_Surface* after = SDL_CreateRGBSurface(0,maxX,maxY,8,0,0,0,0);
+	SDL_Surface* after = SDL_CreateRGBSurface(0,maxX,maxY,32,0,0,0,0);
+	int jndex = 0;
 	int oldX = before -> w;
 	int oldY = before -> h;
-	int ratioX = maxX / oldX;
-	int ratioY = maxY / oldY;
-	printf("no problems yet\n");
+	float ratioX = ((float)maxX) / ((float)oldX);
+	float ratioY = ((float)maxY) / ((float)oldY);
+	float XY = ((float)oldX) / ((float)oldY);
+
+	while(jndex < maxY)
+	{
+		int index = 0;
+		while(index < maxX)
+		{
+			putPixel(after,index,jndex,16777215);
+			++index;
+		}
+		++jndex;
+	}
+
+
 	if(oldX == maxX && oldY == maxY)
 	{
 		after = before;
 	}
 	else
 	{
-		if(oldX > oldY) //When its a fat letter
+		if(XY > 1) //When its a fat letter
 		{
-			//int y = 0;
-			int y = (maxY - (ratioX*oldY)) / 2;
-			printf("Y : %d\n",y);
-			int ymax = maxY - y;
-			while(y < ymax)
+			float y = 0;
+			int y0 = maxY/2 - (1/XY) *  maxX / 2;
+			int ymax = maxY/2 + (1 / XY) *  maxX / 2;
+			int lg = ymax - y0;
+			float iteration = (float)oldY / (float)lg;
+			while(y0 < ymax)
 			{
 				int x = 0;
 				while(x < maxX)
 				{
-					int getx = x * ratioX;
-					int gety = y * ratioX;
-					printf("current X : %d, current y : %d, max x : %d, max y: %d\n",getx , gety , maxX , maxY);
-					putPixel(after, x, y, getpixel(before, getx, gety));
+					int getx = x /  ratioX;
+					putPixel(after, x, y0, getpixel(before, getx,(int) y));
 					++x;
 				}
-				++y;
+				y += iteration;
+				++y0;
 			}
 		}
-		else if(oldY > oldX)//when it's a tall one
+		else if(XY < 1)//when it's a tall one
 		{
 			int y = 0;
+			int x0 = maxX/2 - XY * maxY / 2 ;
+			int xmax = maxX/2 + XY * maxY / 2;
+			int lg = xmax - x0;
+			float iteration = (float)oldX / (float)lg;
 			while(y < maxY)
 			{
-				int x = (maxX - (ratioY*oldX)) / 2;
-				int xmax = maxX - x;
+				int x = x0;
+				float x2 = 0;
 				printf("X : %d\n",x);
 				while(x < xmax)
 				{
-					int getx = x * ratioY;
-					int gety = y * ratioY;
-					printf("current X : %d, current y : %d, max x : %d, max y: %d\n",getx , gety , maxX , maxY);
-					putPixel(after, x, y, getpixel(before, getx, gety));
+					int gety = y / ratioY;
+					putPixel(after, x, y, getpixel(before,(int) x2, gety));
 					++x;
+					x2 += iteration;
 				}
 				++y;
 			}
@@ -65,9 +102,8 @@ SDL_Surface* resize(SDL_Surface* before,int maxX , int maxY)
 				int x = 0;
 				while(x < maxX)
 				{
-					int getx = x * ratioX;
-					int gety = y * ratioX;
-					printf("current X : %d, current y : %d, max x : %d, max y: %d\n",getx , gety , maxX , maxY);
+					int getx = x / ratioX;
+					int gety = y / ratioX;
 					putPixel(after, x, y, getpixel(before, getx, gety));
 					++x;
 				}
@@ -77,3 +113,5 @@ SDL_Surface* resize(SDL_Surface* before,int maxX , int maxY)
 	}
 	return after;
 }
+
+

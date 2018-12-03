@@ -14,27 +14,18 @@ char bmpToChar(network *net, double *in)
 {
 	
 	char *character_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,";
-	int size = 64;	
-
-	feedforward(in, net)
-	
-	char results = ' ';
+	int size = 64;
+	feedforward(in, net);
 	int nb_lay = net->nb_layer;
 	layer **lay_tab = net->layers;
 	int nb_n = lay_tab[nb_lay - 1]->nb_neuron;
-	
+	neuron **output = lay_tab[nb_lay - 1]->neurons;
 	double *output_target  = (double *) malloc(nb_n * sizeof(double));
-
 	for (int j = 0; j < nb_n; ++j)
 	{
 		output_target[j] = output[j]->activation;
 	}
-	
-	results = get_char(output_target, character_list ,size);
-
-	
-
-	return results;
+	return get_char(output_target, character_list ,size);
 }
 
 

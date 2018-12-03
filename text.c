@@ -45,7 +45,6 @@ char* rebuild(int n, char *res)
     int i = 0;
     while ((de = readdir(dr)) != NULL)
     {
-        puts(de->d_name);
         array[i] = de->d_name;
         i++;
     }

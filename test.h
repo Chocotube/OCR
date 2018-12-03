@@ -1,5 +1,5 @@
-#ifndef BLOCS_H
-#define BLOCS_H
+#ifndef TEST_H
+#define TEST_H
 
 int save42(double tab[], int len);
 double* load(char name[], int len);

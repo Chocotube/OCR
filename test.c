@@ -19,17 +19,38 @@ int save42(double tab[], int len)
 	fclose(file_pointer);
 	return m;
 }
+
+void printtab(double *end, double *begin)
+{
+	 for (int line = 0; begin != end; ++begin)
+	{
+		if (line > 72)
+		{
+			printf("|`|\n");
+			line = 0;
+		}
+
+		line += printf("| %lf ", *begin);
+	}
+
+    printf("|\n");
+}
 double* load(char filename[], int len)
 {
 	double *ptr;
-	ptr = (double *)malloc(sizeof(double)*len);
+	int i = 0;
+	ptr = malloc(sizeof(double)*len);
 	FILE *file_pointer;
 	file_pointer = fopen(filename,"r");
-	while(fscanf(file_pointer,"%lf",&ptr))
+	while(i < len)
 	{
+		++i;
+		fscanf(file_pointer,"%lf",ptr);
 		ptr++;
 	}
+	ptr--;
 	fclose(file_pointer);
+	return ptr;
 }
 
 

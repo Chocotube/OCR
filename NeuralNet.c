@@ -1,179 +1,194 @@
-#include<math.h>
-#include<stdlib.h>
-#include<stdio.h>
-#include<fcntl.h>
-#include"NeuralNet.h"
 
-#define NUMPAT 4
-#define NUMIN  2
-#define NUMHID 2
-#define NUMOUT 1
+// Compiled with: gcc -std=c99 -Wextra -Werror -Wall -pthread -lm
 
-#define rando() ((double)rand()/((double)RAND_MAX+1))
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include "NeuralNet.h"
 
-void NeuralNetXOR()
+
+
+/**/
+network *network_init(int *nb, int size)
 {
-	int    i, j, k, p, np, op, ranpat[NUMPAT+1], epoch;
-	int    NumPattern = NUMPAT, NumInput = NUMIN, NumHidden = NUMHID;
-	int    NumOutput = NUMOUT;
-	double Input[NUMPAT+1][NUMIN+1]={{0,0,0},{0,0,0},{0,1,0},{0,0,1},{0,1,1}};
-    double Target[NUMPAT+1][NUMOUT+1] = {{0,0},{0,0},{0,1},{0,1},{0,0}};
-	double SumH[NUMPAT+1][NUMHID+1], WeightIH[NUMIN+1][NUMHID+1];
-	double Hidden[NUMPAT+1][NUMHID+1]; 
-	double SumO[NUMPAT+1][NUMOUT+1], WeightHO[NUMHID+1][NUMOUT+1];
-	double Output[NUMPAT+1][NUMOUT+1];
-	double DeltaO[NUMOUT+1], SumDOW[NUMHID+1], DeltaH[NUMHID+1];
-	double DeltaWeightIH[NUMIN+1][NUMHID+1], DeltaWeightHO[NUMHID+1][NUMOUT+1];
-	double Error, eta = 0.7, alpha = 0.9, smallwt = 0.5;
-
-	/* initializing the weights & delta weights 
-	going from the input to the hidden layer*/
+	network *new_net = (network *) malloc(sizeof(network));
+	new_net->nb_layer = size;
+	new_net->layers = (layer **) malloc(size * sizeof(layer *));
+	layer **layer_tab = new_net->layers;
 	
-	for (j = 1; j <= NumHidden; j++)
+	*layer_tab = first_layer_init(size);
+	
+	for (int i = 1; i < size; i++)
 	{
-		for (i = 0; i <= NumInput; i++)
-		{
-			DeltaWeightIH[i][j] = 0.0;
-			WeightIH[i][j] = 2.0 * (rando() - 0.5) * smallwt;
-		}
+		int j = i - 1;
+		*(layer_tab + i) = layer_init(*(layer_tab + j), nb[i]);
 	}
-
-	/* initializing the weights & delta weights
-	 going from the hidden layer to the output */
-
-	for (k = 1; k <= NumOutput; k++)
-	{
-		for (j = 0; j <= NumHidden; j++)
-		{
-			DeltaWeightHO[j][k] = 0.0;
-			WeightHO[j][k] = 2.0 * (rando() - 0.5) * smallwt;
-		}
-	}
-
-	/* Repeating the learning porcess */
-	for (epoch = 0; epoch < 100000; epoch++)
-	{
-		/* here we randomize the order of traning patterns */
-		for (p = 1; p <= NumPattern; p++)
-		{
-			ranpat[p] = p;
-		}
-		for (p = 1; p <= NumPattern; p++)
-		{
-			np = p + rando() * (NumPattern + 1 - p);
-			op = ranpat[p];
-			ranpat[p] = ranpat[np];
-			ranpat[np] = op;
-		}
-		Error = 0.0;
-
-		/* We repeat the process for all training patterns */
-		for ( np = 1; np <= NumPattern; np++)
-		{
-			p = ranpat[np];
-			
-			/* We  now compute the hidden unit activations */
-			for (j = 1; j <= NumHidden; j++)
-			{
-				SumH[p][j] = WeightIH[0][j];
-				for (i = 1; i <= NumInput; i++)
-				{
-					SumH[p][j] += Input[p][i] * WeightIH[i][j];
-				}
-				Hidden[p][j] = 1.0/(1.0 + exp(-SumH[p][j]));
-			}
-
-			/* And now the output unit activations and errors */
-			for (k = 1; k <= NumOutput; k++)
-			{
-				SumO[p][k] = WeightHO[0][k];
-				for (j = 1; j <= NumHidden; j++)
-				{
-					SumO[p][k] += Hidden[p][j] * WeightHO[j][k];
-				}
-
-				/* Using the sigmoid function we get these outputs*/
-				Output[p][k] = 1.0/(1.0 + exp(-SumO[p][k]));
-				Error += 0.5 * pow((Target[p][k] - Output[p][k]),2);
-				DeltaO[k] = (Target[p][k] - Output[p][k]); 
-				DeltaO[k] *= Output[p][k] * (1.0 - Output[p][k]);
-			}
-
-			/* Here we 'back-propagate' the errors to the hidden layer */
-			for (j = 1; j <= NumHidden; j++)
-			{
-				SumDOW[j] = 0.0;
-				for (k =1; k <= NumOutput; k++)
-				{
-					SumDOW[j] += WeightHO[j][k] * DeltaO[k];
-				}
-				DeltaH[j] = SumDOW[j] * Hidden[p][j] * (1.0 - Hidden[p][j]);
-			}
-
-			/* Updating the wights from th input layer to the hidden one*/
-			for (j = 1; j <= NumHidden; j++)
-			{
-				DeltaWeightIH[0][j] = eta*DeltaH[j]+alpha*DeltaWeightIH[0][j];
-				WeightIH[0][j] += DeltaWeightIH[0][j];
-				for (i = 1; i <= NumInput; i++)
-				{
-					DeltaWeightIH[i][j] = eta * Input[p][i] * DeltaH[j];
-					DeltaWeightIH[i][j] += alpha * DeltaWeightIH[i][j];
-					WeightIH[i][j] += DeltaWeightIH[i][j];
-				}
-			}
-
-			/* Updating the weights from the hidden layer to the output one*/
-			for (k = 1; k <= NumOutput; k++)
-			{
-				DeltaWeightHO[0][k] = eta * DeltaO[k];
-				DeltaWeightHO[0][k] += alpha * DeltaWeightHO[0][k];
-				WeightHO[0][k] += DeltaWeightHO[0][k];
-				for (j = 1; j <= NumHidden; j++)
-				{
-					DeltaWeightHO[j][k] = eta * Hidden[p][j] * DeltaO[k];
-					DeltaWeightHO[j][k] += alpha * DeltaWeightHO[j][k];
-					WeightHO[j][k] += DeltaWeightHO[j][k];
-				}
-			}
-		}
-
-		if( epoch % 100 == 0) 
-		{
-			fprintf(stdout, "\nEpoch %-5d :   Error = %f", epoch, Error);
-		}
-		/* We Stop learning when the amount of error is minimal */
-		if (Error < 0.0004) break;
-	}
-
-		
-	/* We now print the networks outputs */		 
-	fprintf(stdout, "\n\nNETWORK DATA - EPOCH %d\n\nPat\t", epoch); 
-  
-   	for( i = 1 ; i <= NumInput ; i++) 
-	{
-       		fprintf(stdout, "Input%-4d\t", i);
-   	}
-    	for( k = 1 ; k <= NumOutput ; k++) 
-	{
-       		fprintf(stdout, "Target%-4d\tOutput%-4d\t", k, k);
-   	}
-   	for( p = 1 ; p <= NumPattern ; p++ ) 
-	{        
-    	fprintf(stdout, "\n%d\t", p);
-       	for(i = 1 ; i <= NumInput ; i++) 
-		{
-           		fprintf(stdout, "%f\t", Input[p][i]);
-      	}
-       	for(k = 1 ; k <= NumOutput ; k++) 
-		{
-            fprintf(stdout, "%f\t%f\t", Target[p][k], Output[p][k]);
-        }
-    }
-   	fprintf(stdout, "\n\nGoodbye!\n\n");
-		
+	
+	return new_net;
 	
 }
 
+layer *first_layer_init(int size)
+{
+	layer *lay = (layer *) malloc(sizeof(layer));
+
+	lay->nb_neuron = size;
+	lay->neurons = (neuron **) malloc(size * sizeof(neuron *));
+	neuron **neural_tab = lay->neurons;
+	
+	//init_at_zero(*(neural_tab), size);
+
+	for (int i = 0; i < size; i++)
+    {
+        *(neural_tab + i) = first_layer_neuron_init(0);
+    }
+
+	return lay;
+}
+
+neuron *first_layer_neuron_init(double x)
+{
+	neuron *new_neuron = (neuron *) malloc(sizeof(neuron));
+    
+    new_neuron->nb_weights = 0;
+    new_neuron->weights  = NULL;
+    
+    new_neuron->bias = 0;
+    
+    new_neuron->z = 0;
+    new_neuron->activation = x;
+    
+    new_neuron->delta_weights = NULL;
+    new_neuron->delta_bias = 0;
+    
+    return new_neuron;
+}
 
 
+layer *layer_init(layer *prev_lay, int size)
+{
+    int nb = prev_lay->nb_neuron;
+    
+    layer *lay = (layer *) malloc(sizeof(layer));
+    lay->nb_neuron = size;
+    lay->neurons = (neuron **) malloc(size * sizeof(layer *));
+    neuron **neural_tab = lay->neurons;
+        
+    for (int i = 0; i < size; i++)
+    {
+        *(neural_tab + i) = neuron_init(nb);
+    }
+    
+    return lay;
+}
+
+neuron *neuron_init(int nb_w)
+{
+    neuron *new_neuron = (neuron *) malloc(sizeof(neuron));
+    
+    new_neuron->nb_weights = nb_w;
+    new_neuron->weights  = (double *) malloc(nb_w * sizeof(double));
+	double *new_neuronweights = new_neuron->weights;
+    weight_init(new_neuronweights, nb_w);
+    
+    new_neuron->bias = rando();
+    
+    new_neuron->z = 0;
+    new_neuron->activation = 0;
+    
+    new_neuron->delta_weights = (double *) malloc(nb_w * sizeof(double));
+    new_neuron->delta_bias = 0;
+    
+    return new_neuron;
+    
+}
+/**/
+
+/**/
+void weight_init(double *weights, int nb)
+{
+    for (int i = 0; i < nb; i++)
+    {
+        *(weights + i) = rando();
+    }
+}
+
+void init_at_zero(double *tab, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        *(tab + i) = 0;
+    }
+}
+/**/
+
+/**/
+
+double neuron_activation(double *weights, double bias, layer *lay)
+{
+    double z = 0;
+    int size = lay->nb_neuron;
+    neuron **neuron_tab = lay->neurons;
+    
+    for (int i = 0; i < size; i++)
+    {
+        z += (neuron_tab[i]->activation) * *(weights + i);
+    }
+    
+    z += bias;
+    
+    return z;
+}
+
+void first_layer_input(double *input, layer *lay)
+{
+	int nb = lay->nb_neuron;
+	neuron **tab = lay->neurons;
+
+	for (int i = 0; i < nb; i++)
+	{
+		tab[i]->activation  = input[i];
+	}
+}
+
+
+void feedforward(double *input, network *net)
+{
+	int nb_lay = net->nb_layer;
+	layer **lay_tab = net->layers;
+	first_layer_input(input, *lay_tab);
+	
+	for (int i = 1; i < nb_lay; i++)
+	{
+		int nb_neural = lay_tab[i]->nb_neuron;
+		neuron **neural_tab = lay_tab[i]->neurons;
+
+		for(int j = 0; i < nb_neural; j++)
+		{
+			double *weights = neural_tab[j]->weights;
+			double bias = neural_tab[j]->bias;
+			neural_tab[j]->z = neuron_activation(weights, bias, lay_tab[i - 1]);
+			neural_tab[j]->activation = sigmoid(neural_tab[j]->z);
+		}
+	}
+}
+
+/**/
+    
+    
+/**/
+double sigmoid(double z)
+{
+    return 1/(1 + exp(-z));
+}
+
+double sigmoid_prime(double z)
+{
+	return sigmoid(z) * (1-sigmoid(z));
+}
+/**/
+
+int main()
+{
+	return 0;
+}

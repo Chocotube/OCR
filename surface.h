@@ -20,5 +20,6 @@ void binHorArray(SDL_Surface *surf, int array[]);
 SDL_Rect makeRectangle(int x ,int y, int w, int h);
 SDL_Surface* cropSurf(SDL_Surface *surf, SDL_Rect crop);
 void saveSurfaceAsBMP(SDL_Surface *surf, int name, int type);
+void surfToArr(SDL_Surface *surf, double array[]);
 
 #endif

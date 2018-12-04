@@ -6,11 +6,13 @@
 #include <SDL2/SDL.h>
 #include <dirent.h>
 #include "surface.h"
+#include "Save.h"
 
 
 
 int main(int argc, char *argv[])
 {
+    
 	int res = 0;
 	if (argc < 2)
 	{
@@ -20,19 +22,20 @@ int main(int argc, char *argv[])
 	else
 	{
 		char *character_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,";
-	
-		int size = 3;
-		int tab[] = {900,100,63};
-		network *ocr = network_init(tab, size);
+		int tab[] = {900,100,64};
+		network *ocr = network_init(tab, 3);
+        save(ocr,"neuron.txt");
+        
+		training_batch *batch = training_batch_init(64, character_list, argv[1], 448);
 
-	
-	
-		training_batch *batch = training_batch_init(63, character_list, argv[1], 504);
-
-		mini_batch_list *mini_list = mini_batch_list_init(batch, 64);
+		mini_batch_list *mini_list = mini_batch_list_init(batch, 56);
 		test_batch *test = test_batch_init(64, argv[2], character_list);
-	
+        
+        
+        printf("Ta cru hahahahah\n");
 
 		train(ocr, mini_list, 100000, 8, test);
+        printf("done\n");
 	}
+	return res;
 }

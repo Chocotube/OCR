@@ -1,12 +1,32 @@
-
-// Compiled with: gcc -std=c99 -Wextra -Werror -Wall -pthread -lm
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "NeuralNet.h"
+#include "Training.h"
 
 
+char bmpToChar(network *net, double *in)
+{
+    //printf("k\n");
+	
+	char *character_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,";
+	int size = 64;
+    //printf("k\n");
+	feedforward(in, net);
+    
+    //printf("k\n");
+	int nb_lay = net->nb_layer;
+	layer **lay_tab = net->layers;
+	int nb_n = lay_tab[nb_lay - 1]->nb_neuron;
+	neuron **output = lay_tab[nb_lay - 1]->neurons;
+	double *output_target  = (double *) malloc(nb_n * sizeof(double));
+	for (int j = 0; j < nb_n; ++j)
+	{
+    //printf("int j = %d\n",j);
+		output_target[j] = output[j]->activation;
+	}
+	return get_char(output_target, character_list ,size);
+}
 
 /**/
 network *network_init(int *nb, int size)
@@ -16,7 +36,7 @@ network *network_init(int *nb, int size)
 	new_net->layers = (layer **) malloc(size * sizeof(layer *));
 	layer **layer_tab = new_net->layers;
 	
-	*layer_tab = first_layer_init(size);
+	*layer_tab = first_layer_init(nb[0]);
 	
 	for (int i = 1; i < size; i++)
 	{
@@ -57,6 +77,8 @@ neuron *first_layer_neuron_init(double x)
     
     new_neuron->z = 0;
     new_neuron->activation = x;
+    
+    
     
     new_neuron->delta_weights = NULL;
     new_neuron->delta_bias = 0;
@@ -133,6 +155,7 @@ double neuron_activation(double *weights, double bias, layer *lay)
     for (int i = 0; i < size; i++)
     {
         z += (neuron_tab[i]->activation) * *(weights + i);
+        
     }
     
     z += bias;
@@ -162,8 +185,9 @@ void feedforward(double *input, network *net)
 	{
 		int nb_neural = lay_tab[i]->nb_neuron;
 		neuron **neural_tab = lay_tab[i]->neurons;
+        
 
-		for(int j = 0; i < nb_neural; j++)
+		for(int j = 0; j < nb_neural; j++)
 		{
 			double *weights = neural_tab[j]->weights;
 			double bias = neural_tab[j]->bias;
@@ -187,8 +211,3 @@ double sigmoid_prime(double z)
 	return sigmoid(z) * (1-sigmoid(z));
 }
 /**/
-
-int main()
-{
-	return 0;
-}

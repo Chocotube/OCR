@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include "surface.h"
+#include "color.h"
 
 SDL_Surface* LoadImage(char path[])     //Returns the sdl surface of the BMP given in the path
 {
@@ -143,7 +144,6 @@ SDL_Surface* cropSurf(SDL_Surface *surf, SDL_Rect crop)              //Return th
 
 void saveSurfaceAsBMP(SDL_Surface *surf, int name, int type)       //Saves the surface as a BMP named name.bmp
 {
-    
     char strName[sizeof(int) + 26 * sizeof(char)];
     if (type == 1)
         sprintf(strName, "./Letters/%010d_s.bmp", name);
@@ -158,6 +158,11 @@ void saveSurfaceAsBMP(SDL_Surface *surf, int name, int type)       //Saves the s
 
 void surfToArr(SDL_Surface *surf, double array[])
 {
+    /*for (int i = 0; i < 900; i++)
+        {
+            printf("%f ,",array[i]);
+        }*/
+    surf = blackAndWhite(greyScale(surf), 0.5);
     for (int i = 0; i < surf->h; i++)
     {
         for (int j = 0; j < surf->w; j++)
@@ -165,4 +170,8 @@ void surfToArr(SDL_Surface *surf, double array[])
             array[i] = !getPixelRed(surf, j, i);
         }
     }
+    /*for (int i = 0; i < 900; i++)
+        {
+            printf("%f ,",array[i]);
+        }*/
 }

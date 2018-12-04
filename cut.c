@@ -123,9 +123,9 @@ int cut(SDL_Surface *surf)
             }
         }
     }
-    return n;
     free(hor);
     free(ver);
+    return n;
 }
 
 int cutLines(SDL_Surface *surf, int n)
@@ -156,8 +156,8 @@ int cutLines(SDL_Surface *surf, int n)
             saveSurfaceAsBMP(SDL_CreateRGBSurface( 0, 30, 30, 32, 0, 0, 0, 0), n, 2);
         }
     }
-    return n;
     free(ver);
+    return n;
 }
 
 int cutWords(SDL_Surface *surf, int n)
@@ -231,8 +231,8 @@ int cutWords(SDL_Surface *surf, int n)
             }
         }
     }
-    return n;
     free(hor);
+    return n;
 }
 
 int cutLetters(SDL_Surface *surf, int n)
@@ -257,8 +257,8 @@ int cutLetters(SDL_Surface *surf, int n)
         n++;
         saveSurfaceAsBMP(resize(eatBlank(cropSurf(surf, makeRectangle(first, 0, last-first, surf->h))), 30, 30), n, 0);
     }
-    return n;
     free(hor);
+    return n;
 }
 
 SDL_Surface *eatBlank(SDL_Surface *surf)

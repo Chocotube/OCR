@@ -10,35 +10,23 @@
 /*Actual NeuralNetwork*/
 
 
-char bmpToChar(network *net, double *in)
-{
-	
-	char *character_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,";
-	int size = 64;
-	feedforward(in, net);
-	int nb_lay = net->nb_layer;
-	layer **lay_tab = net->layers;
-	int nb_n = lay_tab[nb_lay - 1]->nb_neuron;
-	neuron **output = lay_tab[nb_lay - 1]->neurons;
-	double *output_target  = (double *) malloc(nb_n * sizeof(double));
-	for (int j = 0; j < nb_n; ++j)
-	{
-		output_target[j] = output[j]->activation;
-	}
-	return get_char(output_target, character_list ,size);
-}
-
-
-
-
-
-training_data *training_data_init(double *in, char *tab, char character, int size)
+training_data *training_data_init(char path[], char *tab, char character, int size, char name[])
 {
 	training_data *data = (training_data *) malloc(sizeof(training_data));
-	
-	data->input = in;
+	char *filePath = malloc(len(path) * sizeof(char *) + len(name) * sizeof(char));
+    sprintf(filePath, "%s/%s", path, name);
+    SDL_Surface *surf = LoadImage(filePath);
+    double *array = malloc(sizeof(double) * 900);
+    for (int i = 0; i < 900; i++)
+    {
+        array[i] = 0;
+    }
+    surfToArr(surf, array);
+    data->input = array;
+   
 	data->t_size = size;
 	data->c = character;
+   // printf(" the char you are looking for is = %c\n",data->c);
 	data->target = target_list_init(character, tab, size);
 
 
@@ -65,23 +53,23 @@ training_batch *training_batch_init(int size, char *tab, char path[], int n)
     t_batch->batch = malloc(sizeof(training_data)*n);
 	struct dirent *de;
     DIR *dr = opendir(path);
+    char *point = ".";
+    char *pointpoint = "..";
     if (dr == NULL)
     {
         printf("Could not open current directory" );
     }
     int i = 0;
-    while ((de = readdir(dr)) != NULL && de->d_name[0] != '.' )
+    while ((de = readdir(dr)) != NULL)
     {
-      	char *filePath = malloc(len(path) * sizeof(char *) + sizeof(de->d_name));
-        sprintf(filePath, "%s/%s", path, de->d_name);
-        SDL_Surface *surf = LoadImage(filePath);
-        double array[size*size];
-        surfToArr(surf, array);
-        char c = de->d_name[0];
-        t_batch->batch[i] = training_data_init(array, tab, c, size);
-		++i;
+        if (strcmp(de->d_name, point) != 0 && strcmp(de->d_name, pointpoint) != 0)
+        {
+            puts(de->d_name);
+            char c = de->d_name[0];
+            t_batch->batch[i] = training_data_init(path, tab, c, size, de->d_name);
+            ++i;
+        }
     }
-
 	return t_batch;
 }
 
@@ -91,31 +79,38 @@ mini_batch *mini_batch_init(int size, training_batch *data, int start, int end)
 	new_batch->mb_size = size;
 	new_batch->small_batch = (training_data **) malloc(size * sizeof(training_data *));
 	training_data **new_data = new_batch->small_batch;
+    
+    int i = start;
+    int j = 0;
+    int jEnd = end - start;
 
-	for (int i = start; i < end; ++i)
+	while (i < end && j < jEnd)
 	{
-		new_data[i] = data->batch[i];
+		new_data[j] = data->batch[i];
+        printf("all is good\n");
+        printf("%c, ",data->batch[i]->c);
+        
+        i++;
+        j++;
 	}
-
-	return new_batch;
 	
+	return new_batch;
 }
 
 mini_batch_list *mini_batch_list_init(training_batch *data, int mb_size)
 {
-	
 	int size = data->b_size;
-	training_data **t_data = data->batch;
-	for (int i = 0; i < size - 1; ++i)
+	//training_data **t_data = data->batch;
+	/*for (int i = 0; i < size - 1; ++i)
 	{
 		int j = i + rand() /(RAND_MAX / (size - i) + 1);
 		training_data *t = t_data[j];
 		t_data[j] = t_data[i];
 		t_data[i] = t;
-	}
+	}*/
 	
 	mini_batch_list *mini_list = (mini_batch_list *) malloc(sizeof(mini_batch_list));
-	mini_list->nb_batch = size;
+	mini_list->nb_batch = size / mb_size;
 	mini_list->mini_data = (mini_batch **) malloc((size / mb_size) * sizeof(mini_batch *));
 
 	mini_batch **new_batch = mini_list->mini_data;
@@ -123,17 +118,16 @@ mini_batch_list *mini_batch_list_init(training_batch *data, int mb_size)
 	int k = 0;
 	while (k < size)
 	{
-		for (int l = 0; l < mb_size; ++l)
+		for (int l = 0; l < (size / mb_size); ++l)
 		{
 			int end = k + mb_size;
 			new_batch[l] = mini_batch_init(mb_size, data, k, end);
+            //printf("");
+            k += mb_size;
 		}
-
-		k += mb_size;	
 		
 	}
-
-	return mini_list;	
+	return mini_list;
 
 }
 
@@ -150,18 +144,16 @@ test_batch *test_batch_init(int size, char path[], char *tab)
         printf("Could not open current directory" );
     }
     int i = 0;
-    while ((de = readdir(dr)) != NULL && de->d_name[0] != '.' )
+    while ((de = readdir(dr)) != NULL)
     {
-      	char *filePath = malloc(len(path) * sizeof(char *) + sizeof de->d_name );
-        sprintf(filePath, "%s/%s", path, de->d_name);
-        SDL_Surface *surf = LoadImage(filePath);
-        double array[size*size];
-        surfToArr(surf, array);
-        char c = de->d_name[0];
-        t_batch->test_batch[i] = training_data_init(array, tab, c, size);
-		++i;
+        if (de->d_name[0] != '.')
+        {
+            char c = de->d_name[0];
+            t_batch->test_batch[i] = training_data_init(path, tab, c, size, de->d_name);
+            ++i;
+        }
     }
-
+    
 	return t_batch;
 }
 
@@ -179,16 +171,28 @@ void train(network *net, mini_batch_list *batch, int epoch,
 	mini_batch **tab = batch->mini_data;
 	int nb_test = t_data->tb_size;
 	int i = 0;
+    /*for (int i = 0; i < 64; i++)
+    {
+        printf("%f \n",in[i]);
+    }*/
 	while(i < epoch && error > 0.01)
 	{
+        
+        //printf("number of things i don't have %d\n",nb_mini);
 		for (int j = 0; j < nb_mini; ++j)
 		{
+        //    printf(" I'm fucking not ok right now %d\n", j);
 			update_mini_batch(net, tab[j], eta);
+        //    printf(" HAHAHAHHAHAHAHAHHAHAHHAHAHAHAHAH \n");
 		}
+		
+        //printf("MAYBE MMAUEBHBFVBZ\n");
+        
 		if(epoch % 100 == 0)
 		{
+        //    printf(" WHAAAAAAAAAAAAAATTTTTTTTTT \n");
 			error = evaluate(net,t_data)/nb_test;
-			printf("\nEpoch %-5d :	Error = %f", epoch, error);
+			//printf("\nEpoch %-5d :	Error = %f\n", epoch, error);
 		}
 
 		++i;
@@ -196,23 +200,68 @@ void train(network *net, mini_batch_list *batch, int epoch,
 }
 
 void update_mini_batch(network *net, mini_batch *mini, double eta)
-{
+{   
+  //  printf("yes yes yes yes\n");
+    
 	int size = mini->mb_size;
 	training_data **mini_tab = mini->small_batch;
+    
+    for (int i = 0; i < 56; i++){
+    for (int j = 0; j < 900; j++)
+        {
+           // printf("%c, ",mini_tab[i]->c);
+            //printf("%f, ",mini_tab[i]->input[j]);
+            
+        }
+        //printf("\n%d\n\n",i);
+        
+    }
+    
 	for (int i = 0; i < size; ++i)
 	{
+        //printf("personne la vie BEST PRESIDENT %d\n", i);
 		double *in = mini_tab[i]->input;
-		double *targ = mini_tab[i]->target; 
+        //printf("%c\n",mini_tab[i]->c);
+        for (int j = 0; j < 900; j++)
+        {
+            //printf("%f, ",in[j]);
+            
+        }
+        //printf("\n\n\n");
+
+		double *targ = mini_tab[i]->target;
+        for (int k = 0; k < 64; k++)
+        {
+            //printf("%f, \n",targ[k]);
+            
+        }
+        
+        //printf("\n\n\n");
 		backprop(net, in, targ);
+        
+    //printf("le stylo BEST PRESIDENT\n");
 	}
+	
+    //printf("no my mom doesn' like u\n");
+	
 
 	update_weights_bias(net, size, eta);
+    
+    //printf("but I do\n");
 }
 
 void backprop(network *net, double *input, double *target)
-{
+{   
+    //printf("MACRON BEST PRESIDENT\n");
+    
 	feedforward(input,net);
-
+    
+    //printf("MACRON BEST PRESIDENT\n");
+    
+    /*for (int i = 0; i < 900; i++)
+    {
+        printf("%d ,", (int)input[i]);
+    }*/
 	int nb_lay  = net->nb_layer;
 	layer **lay_tab = net->layers;
 	
@@ -306,7 +355,7 @@ void update_weights_bias(network *net, int size, double eta)
 		int nb_neural = lay_tab[i]->nb_neuron;
 		neuron **neural_tab = lay_tab[i]->neurons;
 
-		for(int j = 0; i < nb_neural; j++)
+		for(int j = 0; j < nb_neural; j++)
 		{
 			int nb_w = neural_tab[j]->nb_weights;
 			double *w = neural_tab[j]->weights;
@@ -451,9 +500,3 @@ double cost_function(layer *last_lay, double *y)
 	return (cost/nb_neural);
 }
 /**/
-
-int main()
-{
-	return 0;
-}
-

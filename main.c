@@ -5,7 +5,7 @@
 #include "surface.h"
 #include "cut.h"
 #include "color.h"
-#include "neuralNet.h"
+#include "NeuralNet.h"
 #include "text.h"
 #include "resize.h"
 #include "app.h"
@@ -26,8 +26,9 @@ int main(int argc, char *argv[])
 	int n = cut(surf);
     char *str = malloc(sizeof(char) * n);
     puts(str);
-    printf("%d\n", (int)&str);
-    str = rebuild(n, 445, str);
+    int tab[] = {900,100,63};
+	network *net = network_init(tab, 3);
+    str = rebuild(n, str, net);
     puts(str);
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return res;

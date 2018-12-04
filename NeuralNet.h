@@ -1,7 +1,8 @@
 #ifndef NEURALNET_H
 #define NEURALNET_H
 
-#define rando() ((double)rand()/((double)RAND_MAX+1))
+                    /* (pow(-1,rand()) */  /*2*/
+#define rando() (double) rand()/((double)RAND_MAX )
 
 /**/
 typedef struct Neuron{
@@ -33,7 +34,7 @@ typedef struct Network{
 
 
 
-
+char bmpToChar(network *net, double *in);
 /**/
 network *network_init(int *nb, int size);
 

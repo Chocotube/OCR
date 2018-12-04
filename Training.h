@@ -48,7 +48,8 @@ typedef struct Test_Batch{
 
 /*init*/
 
-training_data *training_data_init(double *in, char *tab, char character, int size);
+training_data *training_data_init(char path[], char *tab, char character, int size, char name[]);
+int len(char *tab);
 training_batch *training_batch_init(int size, char *tab, char path[], int n);
 mini_batch *mini_batch_init(int size, training_batch *data, int start, int end);
 mini_batch_list *mini_batch_list_init(training_batch *data, int mb_size);

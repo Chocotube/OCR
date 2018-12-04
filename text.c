@@ -5,8 +5,10 @@
 #include <string.h>
 #include "text.h"
 #include "surface.h"
+#include "NeuralNet.h"
+#include "Training.h"
 
-char findChar(char path[])
+char findChar(char path[], network *net)
 {
     char res;
     int i = 0;
@@ -19,9 +21,12 @@ char findChar(char path[])
         char type = path[i+1];
         if (type == 'l')
         {
-            //int array[900];
-            //surfToArr(LoadImage(path), array);
-            res = 'l';//ocr_neuralnet(array);
+            double array[900];
+            char *filePath = malloc(len(path) * sizeof(char *) + 10 * sizeof(char));
+            sprintf(filePath, "./Letters/%s", path);
+            puts(filePath);
+            surfToArr(LoadImage(filePath), array);
+            res = bmpToChar(net, array);
         }
         else if (type == 's')
             res = ' ';
@@ -33,7 +38,7 @@ char findChar(char path[])
     return res;
 }
 
-char* rebuild(int n, char *res)
+char* rebuild(int n, char *res, network *net)
 {
     char *array[n+3];
     struct dirent *de;
@@ -52,7 +57,7 @@ char* rebuild(int n, char *res)
     int j = 0;
     for (int i = 3; i < n; i++)
     {
-        res[j] = findChar(array[i]);
+        res[j] = findChar(array[i], net);
         j++;
     }
     closedir(dr);

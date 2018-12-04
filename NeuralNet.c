@@ -7,10 +7,6 @@
 
 char bmpToChar(network *net, double *in)
 {
-    for (int i = 0; i < 900; i++)
-    {
-        printf("%d", (int)in[i]);
-    }
 	char *character_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,";
 	int size = 64;
 	feedforward(in, net);
@@ -178,13 +174,10 @@ void feedforward(double *input, network *net)
 	int nb_lay = net->nb_layer;
 	layer **lay_tab = net->layers;
 	first_layer_input(input, *lay_tab);
-	
 	for (int i = 1; i < nb_lay; i++)
 	{
 		int nb_neural = lay_tab[i]->nb_neuron;
 		neuron **neural_tab = lay_tab[i]->neurons;
-        
-
 		for(int j = 0; j < nb_neural; j++)
 		{
 			double *weights = neural_tab[j]->weights;

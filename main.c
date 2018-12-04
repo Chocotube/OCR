@@ -9,6 +9,7 @@
 #include "text.h"
 #include "resize.h"
 #include "app.h"
+#include "Save.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +30,7 @@ int main(int argc, char *argv[])
 	network *net = network_init(tab, 3);
     str = rebuild(n, str, net);
     puts(str);
+    save(net, "z");
 	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
 	return res;
     free(str);

@@ -2,7 +2,7 @@
 #define NEURALNET_H
 
                     /* (pow(-1,rand()) */  /*2*/
-#define rando() (double) rand()/((double)RAND_MAX )
+#define rando() (double) (rand()/((double)RAND_MAX )*2)-1
 
 /**/
 typedef struct Neuron{

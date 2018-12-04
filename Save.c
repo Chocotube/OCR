@@ -27,11 +27,12 @@ void save(network *net, char file[])
 
 			for (int k = 0; k < prev_nb_neural; ++k)
 			{
-				fprintf(fp, "%lf\n", weights[k]);
+				//fprintf(fp, "%lf\n", weights[k]);
 			}
 
 			double bias = neural_tab[j]->bias;
-			fprintf(fp, "%lf\n",bias);
+			//fprintf(fp, "%lf\n",bias);
+			fprintf(fp, "%lf\n", neural_tab[j]->activation);
 		}
 	}
 

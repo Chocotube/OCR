@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
     saveSurfaceAsBMP(surf, 0, 0);
 	int n = cut(surf);
     char *str = malloc(sizeof(char) * n);
-    puts(str);
     int tab[] = {900,100,63};
 	network *net = network_init(tab, 3);
     str = rebuild(n, str, net);

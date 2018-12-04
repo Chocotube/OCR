@@ -7,14 +7,13 @@
 
 char bmpToChar(network *net, double *in)
 {
-    //printf("k\n");
-	
+    for (int i = 0; i < 900; i++)
+    {
+        printf("%d", (int)in[i]);
+    }
 	char *character_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,";
 	int size = 64;
-    //printf("k\n");
 	feedforward(in, net);
-    
-    //printf("k\n");
 	int nb_lay = net->nb_layer;
 	layer **lay_tab = net->layers;
 	int nb_n = lay_tab[nb_lay - 1]->nb_neuron;
@@ -22,7 +21,6 @@ char bmpToChar(network *net, double *in)
 	double *output_target  = (double *) malloc(nb_n * sizeof(double));
 	for (int j = 0; j < nb_n; ++j)
 	{
-    //printf("int j = %d\n",j);
 		output_target[j] = output[j]->activation;
 	}
 	return get_char(output_target, character_list ,size);

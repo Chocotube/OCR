@@ -158,20 +158,12 @@ void saveSurfaceAsBMP(SDL_Surface *surf, int name, int type)       //Saves the s
 
 void surfToArr(SDL_Surface *surf, double array[])
 {
-    /*for (int i = 0; i < 900; i++)
-        {
-            printf("%f ,",array[i]);
-        }*/
     surf = blackAndWhite(greyScale(surf), 0.5);
     for (int i = 0; i < surf->h; i++)
     {
         for (int j = 0; j < surf->w; j++)
         {
-            array[i] = !getPixelRed(surf, j, i);
+            array[i * 30 + j] = !getPixelRed(surf, j, i);
         }
     }
-    /*for (int i = 0; i < 900; i++)
-        {
-            printf("%f ,",array[i]);
-        }*/
 }

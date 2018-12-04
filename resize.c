@@ -83,7 +83,6 @@ SDL_Surface* resize(SDL_Surface* before,int maxX , int maxY)
 			{
 				int x = x0;
 				float x2 = 0;
-				printf("X : %d\n",x);
 				while(x < xmax)
 				{
 					int gety = y / ratioY;

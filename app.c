@@ -10,7 +10,7 @@
 #include "NeuralNet.h"
 #include "text.h"
 #include "resize.h"
-
+#include "Save.h"
 
 GObject * app_get_ui_element(App * app, const gchar *name)
 {
@@ -91,7 +91,9 @@ void gobutton(GtkButton *button, App *app)
     saveSurfaceAsBMP(surf, 0, 0);
 	int n = cut(surf);
     char *str = malloc(sizeof(char) * (n + 3));
-    str = rebuild(n, str);
-	gtk_entry_set_text(output1,word);
+	int array[] = {900, 100, 63};
+	network *net= network_init(array, 3);
+    str = rebuild(n, str, net);
+	gtk_entry_set_text(output1, str);
 }
 

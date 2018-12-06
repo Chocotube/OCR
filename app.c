@@ -4,6 +4,13 @@
 #include <SDL2/SDL.h>
 #include <gtk/gtk.h>
 #include "app.h"
+#include "surface.h"
+#include "cut.h"
+#include "color.h"
+#include "NeuralNet.h"
+#include "text.h"
+#include "resize.h"
+
 
 GObject * app_get_ui_element(App * app, const gchar *name)
 {
@@ -27,7 +34,7 @@ void app_init (App * app)
 {
     GError *err = NULL;
     app->definitions = gtk_builder_new ();
-   gtk_builder_add_from_file (app->definitions,UI_DEFINITIONS_FILE, &err);
+    gtk_builder_add_from_file (app->definitions,UI_DEFINITIONS_FILE, &err);
     
     if (err != NULL) 
 	{
@@ -51,21 +58,40 @@ int loadimg(int ar, char* argv2[])
 	image = gtk_image_new_from_file("test.bmp");
 	gtk_container_add(GTK_CONTAINER(window),image);
 	gtk_widget_show_all(window);
+
+
+
 	gtk_main();
 	return 0;
 }
 
 //handlers
 
+void quitbutton()
+{
+	gtk_main_quit();
+}
+
 void gobutton(GtkButton *button, App *app)
 {
 	*button = *button;
 	GET_UI_ELEMENT(GtkEntry, entry1);
 	GET_UI_ELEMENT(GtkEntry, output1);
+	GET_UI_ELEMENT(GtkEntry, entry2);
 	const gchar *word = gtk_entry_get_text(entry1);
+	const gchar *ratio = gtk_entry_get_text(entry2);
+	char ch[120];
+	char num[120];
+	sprintf(num,"%s",ratio);
+	sprintf(ch, "%s", word);
+	printf("%f",atof(num));
+	SDL_Surface *surf = LoadImage(ch);
+	surf = greyScale(surf);
+	surf = blackAndWhite(surf, 0.5);
+    saveSurfaceAsBMP(surf, 0, 0);
+	int n = cut(surf);
+    char *str = malloc(sizeof(char) * (n + 3));
+    str = rebuild(n, str);
 	gtk_entry_set_text(output1,word);
 }
-int loadGUI()
-{
-	return 0;
-}
+

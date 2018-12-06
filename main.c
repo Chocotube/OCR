@@ -9,7 +9,6 @@
 #include "text.h"
 #include "resize.h"
 #include "app.h"
-#include "Save.h"
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +18,17 @@ int main(int argc, char *argv[])
         printf("main: usage: path black_and_white_ratio\n");
         res = 1;
     }
+	loadimg(argc,argv);
+	App *app;
+	app = (App *) g_new(App,1);
+	gtk_init(&argc,&argv);
+	app_init(app);
+	GET_UI_ELEMENT(GtkWidget, window1);
+	gtk_widget_show_all(window1);
+	gtk_main();
+
+
+/*
     SDL_Surface *surf = LoadImage(argv[1]);
 	surf = greyScale(surf);
     float ratio = atof(argv[2]);
@@ -26,12 +36,8 @@ int main(int argc, char *argv[])
     saveSurfaceAsBMP(surf, 0, 0);
 	int n = cut(surf);
     char *str = malloc(sizeof(char) * n);
-    int tab[] = {900,100,63};
-	network *net = network_init(tab, 3);
-    str = rebuild(n, str, net);
-    puts(str);
-    save(net, "z");
-	printf("Credits : marc.gayed, adrien.guell, frederico-jose.silva, jake.penney\n");
+    str = rebuild(n, str);;
 	return res;
-    free(str);
+    free(str);*/
+	return res;
 }

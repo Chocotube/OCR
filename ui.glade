@@ -13,12 +13,34 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkEntry" id="entry1">
+          <object class="GtkMenuBar">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="margin_top">38</property>
-            <property name="margin_bottom">33</property>
-            <property name="text" translatable="yes">Mettez votre emplacement de fichier</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Fichier</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkImageMenuItem" id="button2">
+                        <property name="label">gtk-quit</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <signal name="activate" handler="quitbutton" swapped="no"/>
+                        <signal name="activate-item" handler="quitbutton" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -27,14 +49,39 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="button1">
-            <property name="label" translatable="yes">Go !</property>
+          <object class="GtkEntry" id="entry1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="margin_top">34</property>
-            <property name="margin_bottom">24</property>
-            <signal name="clicked" handler="gobutton" swapped="no"/>
+            <property name="margin_top">36</property>
+            <property name="margin_bottom">33</property>
+            <property name="text" translatable="yes">Please put you file path here</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkEntry" id="entry2">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="margin_left">360</property>
+                <property name="margin_right">360</property>
+                <property name="text" translatable="yes">Grey ratio (percent)</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -43,16 +90,47 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="output1">
+          <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="margin_top">26</property>
-            <property name="margin_bottom">58</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkButton" id="button1">
+                <property name="label" translatable="yes">Launch OCR on this file</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="margin_left">360</property>
+                <property name="margin_right">360</property>
+                <property name="margin_top">33</property>
+                <property name="margin_bottom">24</property>
+                <signal name="clicked" handler="gobutton" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="output1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="margin_left">100</property>
+            <property name="margin_right">100</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
           </packing>
         </child>
       </object>

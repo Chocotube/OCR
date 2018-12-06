@@ -30,6 +30,48 @@ GObject * app_get_ui_element(App * app, const gchar *name)
 	return res;
 }
 
+int save42(char *tab)
+{
+	FILE *file_pointer;
+	file_pointer = fopen("Result", "w");
+	int m = 0;
+	char line[400]; 
+	//*res = (char*) malloc(90000000 * sizeof(char));
+	//--len;
+
+	while(tab)
+	{
+		if(*tab == '\n')
+		{		
+			fprintf(file_pointer,"%s\n",line);
+			int i =  0;
+			while(i < 400)
+			{
+				line[i] = '\0';
+				++i;
+			}
+		}
+		else
+		{
+			line[m] = *tab;
+		}
+
+		tab++;
+		++m;
+	}
+	/*while(fprintf(file_pointer,"%lf\n",tab[m]))
+	{
+		fprintf(file_pointer,"%lf\n",tab[m]);
+		++m;
+	}
+	fprintf(file_pointer,"%lf",tab[m]);
+    */
+	
+	fclose(file_pointer);
+	return m;
+}
+
+
 void app_init (App * app)
 {
     GError *err = NULL;
@@ -88,12 +130,14 @@ void gobutton(GtkButton *button, App *app)
 	SDL_Surface *surf = LoadImage(ch);
 	surf = greyScale(surf);
 	surf = blackAndWhite(surf, 0.5);
-    saveSurfaceAsBMP(surf, 0, 0);
+    	saveSurfaceAsBMP(surf, 0, 0);
 	int n = cut(surf);
-    char *str = malloc(sizeof(char) * (n + 3));
+    	char *str = malloc(sizeof(char) * (n + 3));
 	int array[] = {900, 100, 63};
 	network *net= network_init(array, 3);
-    str = rebuild(n, str, net);
+    	str = rebuild(n, str, net);
+	puts(str);	
+	//save42(str);	
 	gtk_entry_set_text(output1, str);
 }
 

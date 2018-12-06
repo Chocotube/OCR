@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
         printf("main: usage: path black_and_white_ratio\n");
         res = 1;
     }
-	loadimg(argc,argv);
 	App *app;
 	app = (App *) g_new(App,1);
 	gtk_init(&argc,&argv);
